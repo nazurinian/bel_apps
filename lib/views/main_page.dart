@@ -11,25 +11,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  late int selectedRadio;
-  late int selectedRadioTile;
-
   @override
   void initState() {
     super.initState();
-    selectedRadio = 0;
-    selectedRadioTile = 0;
-  }
-
-  setSelectedRadio(int val) {
-    setState(() {
-      selectedRadio = val;
-    });
-  }
-  setSelectedRadioTile(int val) {
-    setState(() {
-      selectedRadioTile = val;
-    });
   }
 
   @override
@@ -70,6 +54,10 @@ class _MainPageState extends State<MainPage> {
                 ),
               ],
             ),
+            const Divider(
+              height: 20,
+              color: Colors.green,
+            ),
             ElevatedButton(
               onPressed: () {
                 Waktu.customTime(
@@ -77,7 +65,7 @@ class _MainPageState extends State<MainPage> {
                   "Testing aja",
                   15,
                   5,
-                      (TimeOfDay selectedTime) {
+                  (TimeOfDay selectedTime) {
                     print('Selected time: $selectedTime');
                     showDialog(
                       context: context,
@@ -102,47 +90,6 @@ class _MainPageState extends State<MainPage> {
                 );
               },
               child: const Text('Pilih Waktu'),
-            ),
-
-            RadioListTile(
-              value: 1,
-              groupValue: selectedRadioTile,
-              title: Text("Radio 1"),
-              subtitle: Text("Radio 1 Subtitle"),
-              onChanged: (val) {
-                print("Radio Tile pressed $val");
-                setSelectedRadioTile(val!);
-              },
-              activeColor: Colors.red,
-              secondary: TextButton(
-                child: Text("Say Hi"),
-                onPressed: () {
-                  print("Say Hello");
-                },
-              ),
-              selected: true,
-            ),
-            RadioListTile(
-              value: 2,
-              groupValue: selectedRadioTile,
-              title: Text("Radio 2"),
-              subtitle: Text("Radio 2 Subtitle"),
-              onChanged: (val) {
-                print("Radio Tile pressed $val");
-                setSelectedRadioTile(val!);
-              },
-              activeColor: Colors.red,
-              secondary: TextButton(
-                child: Text("Say Hi"),
-                onPressed: () {
-                  print("Say Hello");
-                },
-              ),
-              selected: false,
-            ),
-            Divider(
-              height: 20,
-              color: Colors.green,
             ),
           ],
         ),
