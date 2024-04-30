@@ -10,7 +10,7 @@ void main() async {
   await initializeDateFormatting('id_ID', null).then((_) => runApp(MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget {//
   const MyApp({super.key});
 
   @override
