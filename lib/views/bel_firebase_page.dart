@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:bel_sekolah/colors/colors.dart';
 import 'package:bel_sekolah/utils/network_connectivity.dart';
 import 'package:bel_sekolah/utils/size.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
-
 import '../utils/time_picker.dart';
 
 class BelFirebasePage extends StatefulWidget {
@@ -213,29 +211,14 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
 
   late final FirebaseDatabase database;
   TimeOfDay? updateTime;
-  // late int selectedRadio;
   late int selectedRadioTile;
 
   @override
   void initState() {
-    // selectedRadio = 0;
-    // selectedRadioTile = 0;
     database =
         FirebaseDatabase.instanceFor(app: Firebase.app(), databaseURL: url);
     super.initState();
   }
-
-  // setSelectedRadio(int val) {
-  //   setState(() {
-  //     selectedRadio = val;
-  //   });
-  // }
-
-  // setSelectedRadioTile(int val) {
-  //   setState(() {
-  //     selectedRadioTile = val;
-  //   });
-  // }
 
   void updateScheduleTime(int index, TimeOfDay? time, bool? statusAktif) {
     Map<String, String> schedule = {};
@@ -279,27 +262,10 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
     });
   }
 
-  // void updateScheduleTime (int index, TimeOfDay time) {
-  //   Map<String, String> schedule =  {
-  //     'jam' : time.hour.toString(),
-  //     'menit' : time.minute.toString()
-  //   };
-  //   database.ref(widget.scheduleDay).child(index.toString()).child('menit').update(schedule);
-  // }
-
-  void updateScheduleStatus() {}
-
   Widget build(BuildContext context) {
     return Container(
-      // padding: EdgeInsets.only(bottom: 100),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        // color: ColorsTheme.gray
-/*        color: Colors.blue,
-        border: Border.all(
-          color: Colors.black,
-          width: 1.0,
-        ),*/
       ),
       child: FirebaseAnimatedList(
         shrinkWrap: true,
@@ -405,34 +371,12 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Mengubah status aktif"),
                       ));
-                  //     CustomAlertDialog(
-                  //       jamKe: jamKe,
-                  //       aktif: aktif,
-                  //       updateScheduleTime: (int val, bool status) {
-                  //         updateScheduleTime(index, null, status);
-                  //       },
-                  //     )
                       showDialog(
                         context: context,
                         builder: (context) {
-                          // return
-                          // int selectedValue = statusVal ? 1 : 2;
-                          // selectedValue= statusVal ? 1 : 2;
                           bool statusVal = bool.parse(aktif);
                           selectedRadioTile = statusVal ? 1 : 2;
                           return SafeArea(
-                            // child: Theme(
-                            // data: ThemeData.light().copyWith(
-                            //   dividerColor: ColorsTheme.gray,
-                            //   textTheme: TextTheme(
-                            //     bodyText2: TextStyle(color: ColorsTheme.black),
-                            //   ),
-                            //   colorScheme: ColorScheme.fromSwatch().copyWith(
-                            //     primary: ColorsTheme.orange,
-                            //     onSurface: ColorsTheme.black,
-                            //     onPrimary: ColorsTheme.orange,
-                            //   ),
-                            // ),
                             child: Container(
                               margin: EdgeInsets.symmetric(
                                   vertical: screenHeight(context) * 0.25,
@@ -441,10 +385,6 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                 title: const Text("Status bel"),
                                 content: StatefulBuilder(
                                   builder: (context, setState) {
-                                    // setState() {
-                                    //   bool statusVal = bool.parse(aktif);
-                                    //   selectedRadioTile = statusVal ? 1 : 2;
-                                    // }
                                     return ListView(
                                       children: [
                                         Text(
@@ -471,7 +411,6 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                           groupValue: selectedRadioTile,
                                           onChanged: (val) {
                                             print("Radio Tile pressed $val");
-                                            // setSelectedRadioTile(val!);
                                             setState(() {
                                               selectedRadioTile = val!;
                                             });
@@ -553,138 +492,5 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
       default:
         return "Waktu tidak valid";
     }
-  }
-}
-
-// class UpdateScheduleDatabase extends StatefulWidget {
-//   const UpdateScheduleDatabase({super.key});
-//
-//   @override
-//   State<UpdateScheduleDatabase> createState() => _UpdateScheduleDatabaseState();
-// }
-//
-// class _UpdateScheduleDatabaseState extends State<UpdateScheduleDatabase> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-
-class Dialog extends StatefulWidget {
-  const Dialog({super.key});
-
-  @override
-  State<Dialog> createState() => _DialogState();
-}
-
-class _DialogState extends State<Dialog> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class CustomAlertDialog extends StatefulWidget {
-  final String jamKe;
-  final String aktif;
-  final Function(int, bool) updateScheduleTime;
-
-  const CustomAlertDialog({
-    super.key,
-    required this.jamKe,
-    required this.aktif,
-    required this.updateScheduleTime,
-  });
-
-  @override
-  State<CustomAlertDialog> createState() => _CustomAlertDialogState();
-}
-
-class _CustomAlertDialogState extends State<CustomAlertDialog> {
-  late int selectedRadioTile;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedRadioTile = widget.aktif.toLowerCase() == 'true' ? 1 : 2;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-        borderRadius: BorderRadius.circular(16),
-    onTap: () {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    content: Text("Mengubah status aktif"),
-    ));showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Status bel"),
-            content: ListView(
-              shrinkWrap: true,
-              children: [
-                Text(
-                  widget.jamKe,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-                RadioListTile(
-                  title: Text("True"),
-                  value: 1,
-                  groupValue: selectedRadioTile,
-                  onChanged: (val) {
-                    setState(() {
-                      selectedRadioTile = val as int;
-                    });
-                  },
-                ),
-                RadioListTile(
-                  title: Text("False"),
-                  value: 2,
-                  groupValue: selectedRadioTile,
-                  onChanged: (val) {
-                    setState(() {
-                      selectedRadioTile = val as int;
-                    });
-                  },
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  widget.updateScheduleTime(
-                      selectedRadioTile, selectedRadioTile == 1 ? true : false);
-                  Navigator.of(context).pop();
-                },
-                child: Text('Ya'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Membatalkan perubahan status"),
-                  ));
-                },
-                child: Text('Tidak'),
-              ),
-            ],
-          );
-        });
-    },
-    child: Card(
-      color: bool.parse(widget.aktif)
-          ? Colors.blueAccent
-          : Colors.redAccent,
-      margin: const EdgeInsets.all(4),
-      elevation: 2,
-      child: Container(
-        width: 100,
-        height: 50,
-        alignment: Alignment.center,
-        child: Text("Aktif : ${widget.aktif}"),
-      ),
-    ),
-    );
   }
 }
