@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bel_sekolah/colors/colors.dart';
 import 'package:bel_sekolah/utils/network_connectivity.dart';
 import 'package:bel_sekolah/utils/size.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,13 +23,14 @@ class _BelFirebasePageState extends State<BelFirebasePage>
     with SingleTickerProviderStateMixin {
   late String _timeString;
   late TabController controller;
+  Timer? _timer;
 
   @override
   void initState() {
     controller = TabController(vsync: this, length: 2);
 
     _timeString = _formatDateTime(DateTime.now());
-    Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
 
     super.initState();
   }
@@ -36,8 +38,10 @@ class _BelFirebasePageState extends State<BelFirebasePage>
   @override
   void dispose() {
     controller.dispose();
+    _timer?.cancel();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +62,10 @@ class _BelFirebasePageState extends State<BelFirebasePage>
           ],
         ),
       ),
-      body: ConnectionChecker(
-        connectedWidget: Center(
+      body:
+    ConnectionChecker(
+        connectedWidget:
+    Center(
           child: Stack(
             clipBehavior: Clip.hardEdge,
             children: [
@@ -207,11 +213,10 @@ class GetScheduleDatabase extends StatefulWidget {
 }
 
 class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
-  @override
   final url =
       "https://bel-sekolah-2-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
-  late final FirebaseDatabase database;
+  late FirebaseDatabase database;
   TimeOfDay? updateTime;
   // late int selectedRadio;
   late int selectedRadioTile;
@@ -263,6 +268,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            scrollable: true,
             title: const Text('Error'),
             content: Text('Terjadi kesalahan saat memperbarui bel: $error'),
             actions: [
@@ -350,6 +356,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
+                              scrollable: true,
                               title: const Text('Waktu yang Dipilih'),
                               content: Text(
                                 'Jam: ${_formathm(selectedTime.hour)}:${_formathm(selectedTime.minute)}',
@@ -365,11 +372,11 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content:
-                                          Text("Membatalkan perubahan jam"),
-                                    ));
+                                    // ScaffoldMessenger.of(context)
+                                    //     .showSnackBar(const SnackBar(
+                                    //   content:
+                                    //       Text("Membatalkan perubahan jam"),
+                                    // ));
                                   },
                                   child: const Text('Tidak'),
                                 ),
@@ -402,9 +409,9 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                   InkWell(
                     borderRadius: BorderRadius.circular(16),
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Mengubah status aktif"),
-                      ));
+                      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      //   content: Text("Mengubah status aktif"),
+                      // ));
                   //     CustomAlertDialog(
                   //       jamKe: jamKe,
                   //       aktif: aktif,
@@ -433,75 +440,77 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                             //     onPrimary: ColorsTheme.orange,
                             //   ),
                             // ),
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: screenHeight(context) * 0.25,
-                                  horizontal: screenWidth(context) * 0.08),
-                              child: AlertDialog(
-                                title: const Text("Status bel"),
-                                content: StatefulBuilder(
-                                  builder: (context, setState) {
-                                    // setState() {
-                                    //   bool statusVal = bool.parse(aktif);
-                                    //   selectedRadioTile = statusVal ? 1 : 2;
-                                    // }
-                                    return ListView(
-                                      children: [
-                                        Text(
-                                          jamKe,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14),
-                                        ),
-                                        RadioListTile(
-                                          title: Text("True"),
-                                          value: 1,
-                                          groupValue: selectedRadioTile,
-                                          onChanged: (val) {
-                                              print("Radio Tile pressed $val");
-                                              // setSelectedRadioTile(val!);
-                                              setState(() {
-                                                selectedRadioTile = val!;
-                                              });
-                                          }
-                                        ),
-                                        RadioListTile(
-                                          title: Text("False"),
-                                          value: 2,
-                                          groupValue: selectedRadioTile,
-                                          onChanged: (val) {
+                            child: AlertDialog(
+                              scrollable: true,
+                              title: const Text("Status bel"),
+                              content: StatefulBuilder(
+                                builder: (context, setState) {
+                                  // setState() {
+                                  //   bool statusVal = bool.parse(aktif);
+                                  //   selectedRadioTile = statusVal ? 1 : 2;
+                                  // }
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "($jamKe)",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14),
+                                      ),
+                                      RadioListTile(
+                                        title: Text("True"),
+                                        value: 1,
+                                        groupValue: selectedRadioTile,
+                                        onChanged: (val) {
                                             print("Radio Tile pressed $val");
                                             // setSelectedRadioTile(val!);
                                             setState(() {
                                               selectedRadioTile = val!;
                                             });
-                                          },
-                                          selected: false,
-                                        ),
-                                      ],
-                                    );
-                                  }
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      updateScheduleTime(index, null, selectedRadioTile == 1 ? true : false);
-                                    },
-                                    child: const Text('Ya'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text(
-                                            "Membatalkan perubahan status"),
-                                      ));
-                                    },
-                                    child: const Text('Tidak'),
-                                  ),
-                                ],
+                                        }
+                                      ),
+                                      RadioListTile(
+                                        title: Text("False"),
+                                        value: 2,
+                                        groupValue: selectedRadioTile,
+                                        onChanged: (val) {
+                                          print("Radio Tile pressed $val");
+                                          // setSelectedRadioTile(val!);
+                                          setState(() {
+                                            selectedRadioTile = val!;
+                                          });
+                                        },
+                                        selected: false,
+                                      ),
+                                    ],
+                                  );
+                                }
                               ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    // ScaffoldMessenger.of(context)
+                                    //     .showSnackBar(const SnackBar(
+                                    //   content: Text(
+                                    //       "Membatalkan perubahan status"),
+                                    // ));
+                                  },
+                                  child: const Text('Tidak'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    updateScheduleTime(index, null, selectedRadioTile == 1 ? true : false);
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                      content: Text(
+                                          "Berhasil mengubah status bel"),
+                                    ));
+                                  },
+                                  child: const Text('Ya'),
+                                ),
+                              ],
                             ),
                           );
                         },
@@ -528,6 +537,18 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
         ],
       ),
     );
+  }
+
+  Future<void> _handleUploadAction(BuildContext context) async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // Tidak ada koneksi internet, langsung tampilkan halaman/error
+      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => NoInternetPage()));
+    } else {
+      // Ada koneksi internet, lakukan tindakan upload
+      // Misalnya, panggil fungsi uploadData() di sini
+      // uploadData();
+    }
   }
 
   String _formathm(int hm) {
@@ -620,6 +641,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            scrollable: true,
             title: Text("Status bel"),
             content: ListView(
               shrinkWrap: true,

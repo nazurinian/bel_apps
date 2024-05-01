@@ -1,3 +1,4 @@
+import 'package:bel_sekolah/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bel_sekolah/views/splash_screen.dart';
@@ -5,8 +6,9 @@ import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
-  await initializeDateFormatting('id_ID', null).then((_) => runApp(MyApp()));
+  // await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await initializeDateFormatting('id_ID', null).then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {//
