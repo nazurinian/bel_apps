@@ -1,5 +1,6 @@
 import 'package:bel_sekolah/utils/time_picker.dart';
 import 'package:bel_sekolah/views/serial_bt_page.dart';
+import 'package:bel_sekolah/views/serialbt/MainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:bel_sekolah/views/bel_firebase_page.dart';
 
@@ -37,7 +38,8 @@ class _MainPageState extends State<MainPage> {
                   onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SerialBTPage(),
+                        // builder: (context) => const SerialBTPage(),
+                        builder: (context) => const BTSerialPage(),
                       )),
                   child: const Text("Menu Bluetooth"),
                 ),

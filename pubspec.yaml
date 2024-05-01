@@ -41,6 +41,7 @@ dependencies:
   fluttertoast: ^8.2.5
   connectivity_plus: ^6.0.3
   flutter_bluetooth_serial: ^0.4.0
+  scoped_model: ^2.0.0
 
 dev_dependencies:
   flutter_test:
