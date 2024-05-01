@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bel_sekolah/colors/colors.dart';
+import 'package:bel_sekolah/models/schedule.dart';
 import 'package:bel_sekolah/utils/network_connectivity.dart';
 import 'package:bel_sekolah/utils/size.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import '../utils/time_picker.dart';
 
+///** Kurang Firebase Auth */
 class BelFirebasePage extends StatefulWidget {
   const BelFirebasePage({super.key});
 
@@ -224,20 +226,30 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
     super.initState();
   }
 
-  void updateScheduleTime(int index, TimeOfDay? time, bool? statusAktif) {
-    Map<String, String> schedule = {};
+  void updateScheduleTime(int index, TimeOfDay? time, bool? statusAktif, Schedule oldSchedule) {
+    // Map<String, String> schedule = {};
+
+    // if (statusAktif != null) {
+    //   schedule['aktif'] = statusAktif.toString();
+    // } else {
+    //   schedule['jam'] = time!.hour.toString();
+    //   schedule['menit'] = time!.minute.toString();
+    // }
+
+    Schedule schedule;
 
     if (statusAktif != null) {
-      schedule['aktif'] = statusAktif.toString();
+      schedule = Schedule(aktif: statusAktif, jam: oldSchedule.jam, menit: oldSchedule.menit);
     } else {
-      schedule['jam'] = time!.hour.toString();
-      schedule['menit'] = time!.minute.toString();
+      schedule = Schedule(aktif: oldSchedule.aktif, jam: time!.hour, menit: time!.minute);
     }
+
+    Map<String, dynamic> scheduleJson = schedule.toJson(); // Mengubah tipe data menjadi Map<String, dynamic>
 
     database
         .ref(widget.scheduleDay)
         .child(index.toString())
-        .update(schedule)
+        .update(scheduleJson)
         .then((_) {
       print('Berhasil memperbarui bel');
       Navigator.of(context).pop();
@@ -272,7 +284,6 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
       // padding: EdgeInsets.only(bottom: 100),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        // color: ColorsTheme.gray
 /*        color: Colors.blue,
         border: Border.all(
           color: Colors.black,
@@ -286,18 +297,20 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
         defaultChild: const Center(child: CircularProgressIndicator()),
         query: database.ref(widget.scheduleDay),
         itemBuilder: (context, snapshot, animation, index) {
-          Map schedule = snapshot.value as Map;
-          schedule['key'] = snapshot.key;
+          // Map schedule = snapshot.value as Map;
+          // schedule['key'] = snapshot.key;
+          final json = snapshot.value as Map<dynamic, dynamic>;
+          final schedule = Schedule.fromJson(json);
           return listSchedule(schedule: schedule, index: index + 1);
         },
       ),
     );
   }
 
-  Widget listSchedule({required Map schedule, required int index}) {
-    String aktif = schedule['aktif'].toString();
-    String jam = schedule['jam'].toString().padLeft(2, '0');
-    String menit = schedule['menit'].toString().padLeft(2, '0');
+  Widget listSchedule({required Schedule schedule, required int index}) {
+    String aktif = schedule.aktif.toString();
+    String jam = schedule.jam.toString().padLeft(2, '0');
+    String menit = schedule.menit.toString().padLeft(2, '0');
     String jamKe = jamEditTitle(index.toString());
 
     return Card(
@@ -337,7 +350,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                 TextButton(
                                   onPressed: () {
                                     updateScheduleTime(
-                                        index, selectedTime, null);
+                                        index, selectedTime, null, schedule);
                                   },
                                   child: const Text('Ya'),
                                 ),
@@ -379,9 +392,6 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                       showDialog(
                         context: context,
                         builder: (context) {
-                          // return
-                          // int selectedValue = statusVal ? 1 : 2;
-                          // selectedValue= statusVal ? 1 : 2;
                           bool statusVal = bool.parse(aktif);
                           selectedRadioTile = statusVal ? 1 : 2;
                           return SafeArea(
@@ -449,7 +459,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    updateScheduleTime(index, null, selectedRadioTile == 1 ? true : false);
+                                    updateScheduleTime(index, null, selectedRadioTile == 1 ? true : false, schedule);
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(const SnackBar(
                                       content: Text(
