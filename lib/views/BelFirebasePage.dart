@@ -29,7 +29,8 @@ class _BelFirebasePageState extends State<BelFirebasePage>
     controller = TabController(vsync: this, length: 2);
 
     _timeString = _formatDateTime(DateTime.now());
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
+    _timer =
+        Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
 
     super.initState();
   }
@@ -40,7 +41,6 @@ class _BelFirebasePageState extends State<BelFirebasePage>
     _timer?.cancel();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +61,8 @@ class _BelFirebasePageState extends State<BelFirebasePage>
           ],
         ),
       ),
-      body:
-    ConnectionChecker(
-        connectedWidget:
-    Center(
+      body: ConnectionChecker(
+        connectedWidget: Center(
           child: Stack(
             clipBehavior: Clip.hardEdge,
             children: [
@@ -110,7 +108,21 @@ class _BelFirebasePageState extends State<BelFirebasePage>
           ),
         ),
         disconnectedWidget: const Center(
-          child: Text('Tidak ada koneksi'), // Ganti pake icon
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.signal_wifi_connected_no_internet_4,
+                size: 120.0,
+              ),
+              Text(
+                "'Tidak ada koneksi internet",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -226,7 +238,8 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
     super.initState();
   }
 
-  void updateScheduleTime(int index, TimeOfDay? time, bool? statusAktif, Schedule oldSchedule) {
+  void updateScheduleTime(
+      int index, TimeOfDay? time, bool? statusAktif, Schedule oldSchedule) {
     // Map<String, String> schedule = {};
 
     // if (statusAktif != null) {
@@ -239,12 +252,15 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
     Schedule schedule;
 
     if (statusAktif != null) {
-      schedule = Schedule(aktif: statusAktif, jam: oldSchedule.jam, menit: oldSchedule.menit);
+      schedule = Schedule(
+          aktif: statusAktif, jam: oldSchedule.jam, menit: oldSchedule.menit);
     } else {
-      schedule = Schedule(aktif: oldSchedule.aktif, jam: time!.hour, menit: time!.minute);
+      schedule = Schedule(
+          aktif: oldSchedule.aktif, jam: time!.hour, menit: time!.minute);
     }
 
-    Map<String, dynamic> scheduleJson = schedule.toJson(); // Mengubah tipe data menjadi Map<String, dynamic>
+    Map<String, dynamic> scheduleJson =
+        schedule.toJson(); // Mengubah tipe data menjadi Map<String, dynamic>
 
     database
         .ref(widget.scheduleDay)
@@ -385,8 +401,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child:
-                  InkWell(
+                  child: InkWell(
                     borderRadius: BorderRadius.circular(16),
                     onTap: () {
                       showDialog(
@@ -410,32 +425,20 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                             child: AlertDialog(
                               scrollable: true,
                               title: const Text("Status bel"),
-                              content: StatefulBuilder(
-                                builder: (context, setState) {
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        "($jamKe)",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      ),
-                                      RadioListTile(
-                                        title: Text("True"),
+                              content:
+                                  StatefulBuilder(builder: (context, setState) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "($jamKe)",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                    ),
+                                    RadioListTile(
+                                        title: const Text("True"),
                                         value: 1,
-                                        groupValue: selectedRadioTile,
-                                        onChanged: (val) {
-                                            print("Radio Tile pressed $val");
-                                            // setSelectedRadioTile(val!);
-                                            setState(() {
-                                              selectedRadioTile = val!;
-                                            });
-                                        }
-                                      ),
-                                      RadioListTile(
-                                        title: Text("False"),
-                                        value: 2,
                                         groupValue: selectedRadioTile,
                                         onChanged: (val) {
                                           print("Radio Tile pressed $val");
@@ -443,13 +446,23 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                           setState(() {
                                             selectedRadioTile = val!;
                                           });
-                                        },
-                                        selected: false,
-                                      ),
-                                    ],
-                                  );
-                                }
-                              ),
+                                        }),
+                                    RadioListTile(
+                                      title: const Text("False"),
+                                      value: 2,
+                                      groupValue: selectedRadioTile,
+                                      onChanged: (val) {
+                                        print("Radio Tile pressed $val");
+                                        // setSelectedRadioTile(val!);
+                                        setState(() {
+                                          selectedRadioTile = val!;
+                                        });
+                                      },
+                                      selected: false,
+                                    ),
+                                  ],
+                                );
+                              }),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -459,11 +472,15 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    updateScheduleTime(index, null, selectedRadioTile == 1 ? true : false, schedule);
+                                    updateScheduleTime(
+                                        index,
+                                        null,
+                                        selectedRadioTile == 1 ? true : false,
+                                        schedule);
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(const SnackBar(
-                                      content: Text(
-                                          "Berhasil mengubah status bel"),
+                                      content:
+                                          Text("Berhasil mengubah status bel"),
                                     ));
                                   },
                                   child: const Text('Ya'),

@@ -1,14 +1,32 @@
 import 'package:bel_sekolah/firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:bel_sekolah/views/splash_screen.dart';
+import 'package:bel_sekolah/views/SplashScreen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await initializeDateFormatting('id_ID', null).then((_) => runApp(const MyApp()));
+
+  if (FirebaseAuth.instance.currentUser != null) {
+    await initializeDateFormatting('id_ID', null).then((_) => runApp(const MyApp()));
+    print('id login: ${FirebaseAuth.instance.currentUser!.uid}');
+  } else {
+    await FirebaseAuth.instance.signInAnonymously();
+    print('id login: ${FirebaseAuth.instance.currentUser!.uid}');
+
+  }
+
+  // if (FirebaseAuth.instance.currentUser != null) {
+  //   await FirebaseAuth.instance.signOut();
+  // }
+  //
+  // await FirebaseAuth.instance.signInAnonymously();
+  // print('2: ${FirebaseAuth.instance.currentUser!.uid}');
+  //
+  // await initializeDateFormatting('id_ID', null).then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {//
