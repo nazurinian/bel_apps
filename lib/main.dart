@@ -7,29 +7,20 @@ import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   if (FirebaseAuth.instance.currentUser != null) {
-    await initializeDateFormatting('id_ID', null).then((_) => runApp(const MyApp()));
+    await initializeDateFormatting('id_ID', null)
+        .then((_) => runApp(const MyApp()));
     print('id login: ${FirebaseAuth.instance.currentUser!.uid}');
   } else {
     await FirebaseAuth.instance.signInAnonymously();
     print('id login: ${FirebaseAuth.instance.currentUser!.uid}');
-
   }
-
-  // if (FirebaseAuth.instance.currentUser != null) {
-  //   await FirebaseAuth.instance.signOut();
-  // }
-  //
-  // await FirebaseAuth.instance.signInAnonymously();
-  // print('2: ${FirebaseAuth.instance.currentUser!.uid}');
-  //
-  // await initializeDateFormatting('id_ID', null).then((_) => runApp(const MyApp()));
 }
 
-class MyApp extends StatelessWidget {//
+class MyApp extends StatelessWidget {
+  //
   const MyApp({super.key});
 
   @override

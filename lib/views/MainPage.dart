@@ -17,7 +17,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text("Bel Home"),
         centerTitle: true,
       ),
       body: Container(

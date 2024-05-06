@@ -5,13 +5,15 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
+import '../../colors/colors.dart';
+
 class ChatPage extends StatefulWidget {
   final BluetoothDevice server;
 
-  const ChatPage({required this.server});
+  const ChatPage({super.key, required this.server});
 
   @override
-  _ChatPage createState() => new _ChatPage();
+  State<ChatPage> createState() => _ChatPage();
 }
 
 class _Message {
@@ -28,11 +30,11 @@ class _ChatPage extends State<ChatPage> {
   List<_Message> messages = List<_Message>.empty(growable: true);
   String _messageBuffer = '';
 
-  final TextEditingController textEditingController =
-      new TextEditingController();
-  final ScrollController listScrollController = new ScrollController();
+  final TextEditingController textEditingController = TextEditingController();
+  final ScrollController listScrollController = ScrollController();
 
   bool isConnecting = true;
+
   bool get isConnected => (connection?.isConnected ?? false);
 
   bool isDisconnecting = false;
@@ -87,25 +89,25 @@ class _ChatPage extends State<ChatPage> {
   Widget build(BuildContext context) {
     final List<Row> list = messages.map((_message) {
       return Row(
-        children: <Widget>[
+        mainAxisAlignment: _message.whom == clientID
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
+        children: [
           Container(
-            child: Text(
-                (text) {
-                  return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
-                }(_message.text.trim()),
-                style: TextStyle(color: Colors.white)),
-            padding: EdgeInsets.all(12.0),
-            margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
+            padding: const EdgeInsets.all(12.0),
+            margin: const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
             width: 222.0,
             decoration: BoxDecoration(
                 color:
                     _message.whom == clientID ? Colors.blueAccent : Colors.grey,
                 borderRadius: BorderRadius.circular(7.0)),
+            child: Text(
+                (text) {
+                  return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
+                }(_message.text.trim()),
+                style: const TextStyle(color: Colors.white)),
           ),
         ],
-        mainAxisAlignment: _message.whom == clientID
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
       );
     }).toList();
 
@@ -134,13 +136,31 @@ class _ChatPage extends State<ChatPage> {
                     child: TextField(
                       style: const TextStyle(fontSize: 15.0),
                       controller: textEditingController,
-                      decoration: InputDecoration.collapsed(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: ColorsTheme.lightBackground,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: ColorsTheme.lightBackground,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: ColorsTheme.lightBackground2,
+                          ),
+                        ),
                         hintText: isConnecting
                             ? 'Wait until connected...'
                             : isConnected
-                                ? 'Type your message...'
-                                : 'Chat got disconnected',
+                            ? 'Type your message...'
+                            : 'Chat got disconnected',
                         hintStyle: const TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
                       ),
                       enabled: isConnected,
                     ),
@@ -224,10 +244,10 @@ class _ChatPage extends State<ChatPage> {
           messages.add(_Message(clientID, text));
         });
 
-        Future.delayed(Duration(milliseconds: 333)).then((_) {
+        Future.delayed(const Duration(milliseconds: 333)).then((_) {
           listScrollController.animateTo(
               listScrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 333),
+              duration: const Duration(milliseconds: 333),
               curve: Curves.easeOut);
         });
       } catch (e) {
