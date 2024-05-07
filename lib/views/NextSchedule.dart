@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bel_sekolah/utils/DisplaySize.dart';
 import 'package:flutter/material.dart';
 import 'package:bel_sekolah/themes/colors/Colors.dart';
 import 'package:bel_sekolah/models/ScheduleModel.dart';
@@ -100,13 +101,20 @@ class _NextScheduleState extends State<NextSchedule> {
       }
     }
 
-    return Text(belNow);
+    return Text(
+      "Saat ini : \n$belNow",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: ColorsTheme.green,
+      ),
+    );
   }
 
   Widget nextTimeSchedule(CustomTime currentTime, List<Schedule> schedule) {
     int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
 
-    String nextBel = "----------------";
+    String nextBel = "---";
 
     for (int i = 0; i < schedules.length; i++) {
       int jadwalJam = schedule[i].jam!;
@@ -119,23 +127,39 @@ class _NextScheduleState extends State<NextSchedule> {
       }
     }
 
-    return Text(nextBel);
+    return Text(
+      "Next Bel : \n$nextBel",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: ColorsTheme.yellow,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            _currentTime.getAllTime(),
-            textAlign: TextAlign.center,
-            style: TextStyle(
+          SizedBox(
+              width: screenWidth(context) * 0.3,
+              child: getScheduleTitle(_currentTime, 0, schedules)),
+          SizedBox(
+            width: screenWidth(context) * 0.3,
+            child: Text(
+              _currentTime.getAllTime(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: ColorsTheme.lightBackground),
+                color: ColorsTheme.lightBackground,
+              ),
+            ),
           ),
-          getScheduleTitle(_currentTime, 0, schedules),
-          nextTimeSchedule(_currentTime, schedules),
+          SizedBox(
+              width: screenWidth(context) * 0.3,
+              child: nextTimeSchedule(_currentTime, schedules)),
         ],
       ),
     );

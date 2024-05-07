@@ -47,11 +47,11 @@ class _BelFirebasePageState extends State<BelFirebasePage>
           controller: controller,
           tabs: const [
             Tab(
-              icon: Icon(Icons.ac_unit),
+              icon: Icon(Icons.access_time_filled),
               text: "Senin-Kamis",
             ),
             Tab(
-              icon: Icon(Icons.access_alarm),
+              icon: Icon(Icons.access_time),
               text: "Jumat",
             ),
           ],
@@ -73,10 +73,10 @@ class _BelFirebasePageState extends State<BelFirebasePage>
                   child: TabBarView(
                     controller: controller,
                     children: [
-                      Tab1(
+                      TabSeninKeKamis(
                         firebaseDatabase: database,
                       ),
-                      Tab2(
+                      TabJumat(
                         firebaseDatabase: database,
                       ),
                     ],
@@ -123,16 +123,17 @@ class _BelFirebasePageState extends State<BelFirebasePage>
   }
 }
 
-class Tab1 extends StatefulWidget {
+class TabSeninKeKamis extends StatefulWidget {
   final FirebaseDatabase firebaseDatabase;
 
-  const Tab1({super.key, required this.firebaseDatabase});
+  const TabSeninKeKamis({super.key, required this.firebaseDatabase});
 
   @override
-  State<Tab1> createState() => _Tab1State();
+  State<TabSeninKeKamis> createState() => _TabSeninKeKamisState();
 }
 
-class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin {
+class _TabSeninKeKamisState extends State<TabSeninKeKamis>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -165,16 +166,17 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin {
   }
 }
 
-class Tab2 extends StatefulWidget {
+class TabJumat extends StatefulWidget {
   final FirebaseDatabase firebaseDatabase;
 
-  const Tab2({super.key, required this.firebaseDatabase});
+  const TabJumat({super.key, required this.firebaseDatabase});
 
   @override
-  State<Tab2> createState() => _Tab2State();
+  State<TabJumat> createState() => _TabJumatState();
 }
 
-class _Tab2State extends State<Tab2> with AutomaticKeepAliveClientMixin {
+class _TabJumatState extends State<TabJumat>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -282,7 +284,9 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
       ),
       child: FirebaseAnimatedList(
         shrinkWrap: true,
-        padding: const EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 80),
+
+        /// Padding bawah list
         physics: const BouncingScrollPhysics(),
         defaultChild: const Center(child: CircularProgressIndicator()),
         query: widget.firebaseDatabase.ref(widget.scheduleDay),
