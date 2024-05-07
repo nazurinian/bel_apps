@@ -1,5 +1,7 @@
+// import 'dart:async';
+// import 'package:bel_sekolah/colors/colors.dart';
 import 'dart:async';
-import 'package:bel_sekolah/colors/colors.dart';
+
 import 'package:bel_sekolah/models/schedule.dart';
 import 'package:bel_sekolah/utils/network_connectivity.dart';
 import 'package:bel_sekolah/utils/size.dart';
@@ -8,7 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
+import '../colors/colors.dart';
 import '../utils/time_picker.dart';
+import 'package:bel_sekolah/views/NextSchedule.dart';
 
 ///** Kurang Firebase Auth */
 class BelFirebasePage extends StatefulWidget {
@@ -20,12 +25,18 @@ class BelFirebasePage extends StatefulWidget {
 
 class _BelFirebasePageState extends State<BelFirebasePage>
     with SingleTickerProviderStateMixin {
+  final url =
+      "https://bel-sekolah-2-default-rtdb.asia-southeast1.firebasedatabase.app/";
+  late FirebaseDatabase database;
+
   late String _timeString;
   late TabController controller;
   Timer? _timer;
 
   @override
   void initState() {
+    database =
+        FirebaseDatabase.instanceFor(app: Firebase.app(), databaseURL: url);
     controller = TabController(vsync: this, length: 2);
 
     _timeString = _formatDateTime(DateTime.now());
@@ -38,7 +49,7 @@ class _BelFirebasePageState extends State<BelFirebasePage>
   @override
   void dispose() {
     controller.dispose();
-    _timer?.cancel();
+    // _timer?.cancel();
     super.dispose();
   }
 
@@ -78,31 +89,24 @@ class _BelFirebasePageState extends State<BelFirebasePage>
                         top: 16, bottom: 0, left: 16, right: 16),
                     child: TabBarView(
                       controller: controller,
-                      children: const [
-                        Tab1(),
-                        Tab2(),
+                      children: [
+                        Tab1(firebaseDatabase: database,),
+                        Tab2(firebaseDatabase: database,),
                       ],
                     )),
               ),
+              // Nadifah
               Positioned(
                 // height: 0,
                 width: screenWidth(context),
                 bottom: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(50)),
-                    color: ColorsTheme.primaryBrown,
-                  ),
-                  child: Text(
-                    _timeString,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: ColorsTheme.lightBackground),
-                  ),
-                ),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(50)),
+                      color: ColorsTheme.primaryBrown,
+                    ),
+                    child: NextSchedule(firebaseDatabase: database,))
               ),
             ],
           ),
@@ -142,7 +146,9 @@ class _BelFirebasePageState extends State<BelFirebasePage>
 }
 
 class Tab1 extends StatefulWidget {
-  const Tab1({super.key});
+  final FirebaseDatabase firebaseDatabase;
+
+  const Tab1({super.key, required this.firebaseDatabase});
 
   @override
   State<Tab1> createState() => _Tab1State();
@@ -170,7 +176,7 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin {
           ),
           Expanded(
             // child: _buildScheduleColumn(jadwal1),
-            child: GetScheduleDatabase(scheduleDay: jadwal1),
+            child: GetScheduleDatabase(scheduleDay: jadwal1, firebaseDatabase: widget.firebaseDatabase,),
           )
         ],
       ),
@@ -179,7 +185,9 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin {
 }
 
 class Tab2 extends StatefulWidget {
-  const Tab2({super.key});
+  final FirebaseDatabase firebaseDatabase;
+
+  const Tab2({super.key, required this.firebaseDatabase});
 
   @override
   State<Tab2> createState() => _Tab2State();
@@ -206,7 +214,7 @@ class _Tab2State extends State<Tab2> with AutomaticKeepAliveClientMixin {
                 decoration: TextDecoration.underline),
           ),
           Expanded(
-            child: GetScheduleDatabase(scheduleDay: jadwal2),
+            child: GetScheduleDatabase(scheduleDay: jadwal2, firebaseDatabase: widget.firebaseDatabase,),
           )
         ],
       ),
@@ -216,27 +224,28 @@ class _Tab2State extends State<Tab2> with AutomaticKeepAliveClientMixin {
 
 class GetScheduleDatabase extends StatefulWidget {
   final String scheduleDay;
+  final FirebaseDatabase firebaseDatabase;
 
-  const GetScheduleDatabase({super.key, required this.scheduleDay});
+  const GetScheduleDatabase({super.key, required this.scheduleDay, required this.firebaseDatabase});
 
   @override
   State<GetScheduleDatabase> createState() => _GetScheduleDatabaseState();
 }
 
 class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
-  final url =
-      "https://bel-sekolah-2-default-rtdb.asia-southeast1.firebasedatabase.app/";
+  // final url =
+  //     "https://bel-sekolah-2-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
-  late FirebaseDatabase database;
+  // late FirebaseDatabase database;
   TimeOfDay? updateTime;
   late int selectedRadioTile;
 
-  @override
-  void initState() {
-    database =
-        FirebaseDatabase.instanceFor(app: Firebase.app(), databaseURL: url);
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   database =
+  //       FirebaseDatabase.instanceFor(app: Firebase.app(), databaseURL: url);
+  //   super.initState();
+  // }
 
   void updateScheduleTime(
       int index, TimeOfDay? time, bool? statusAktif, Schedule oldSchedule) {
@@ -262,7 +271,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
     Map<String, dynamic> scheduleJson =
         schedule.toJson(); // Mengubah tipe data menjadi Map<String, dynamic>
 
-    database
+    widget.firebaseDatabase
         .ref(widget.scheduleDay)
         .child(index.toString())
         .update(scheduleJson)
@@ -311,7 +320,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
         padding: const EdgeInsets.only(bottom: 60),
         physics: const BouncingScrollPhysics(),
         defaultChild: const Center(child: CircularProgressIndicator()),
-        query: database.ref(widget.scheduleDay),
+        query: widget.firebaseDatabase.ref(widget.scheduleDay),
         itemBuilder: (context, snapshot, animation, index) {
           // Map schedule = snapshot.value as Map;
           // schedule['key'] = snapshot.key;
