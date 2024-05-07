@@ -1,7 +1,3 @@
-// import 'dart:async';
-// import 'package:bel_sekolah/colors/colors.dart';
-import 'dart:async';
-
 import 'package:bel_sekolah/models/schedule.dart';
 import 'package:bel_sekolah/utils/network_connectivity.dart';
 import 'package:bel_sekolah/utils/size.dart';
@@ -9,13 +5,10 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:intl/intl.dart';
-// import 'package:intl/intl.dart';
 import '../colors/colors.dart';
 import '../utils/time_picker.dart';
 import 'package:bel_sekolah/views/NextSchedule.dart';
 
-///** Kurang Firebase Auth */
 class BelFirebasePage extends StatefulWidget {
   const BelFirebasePage({super.key});
 
@@ -28,10 +21,7 @@ class _BelFirebasePageState extends State<BelFirebasePage>
   final url =
       "https://bel-sekolah-2-default-rtdb.asia-southeast1.firebasedatabase.app/";
   late FirebaseDatabase database;
-
-  late String _timeString;
   late TabController controller;
-  Timer? _timer;
 
   @override
   void initState() {
@@ -39,17 +29,12 @@ class _BelFirebasePageState extends State<BelFirebasePage>
         FirebaseDatabase.instanceFor(app: Firebase.app(), databaseURL: url);
     controller = TabController(vsync: this, length: 2);
 
-    _timeString = _formatDateTime(DateTime.now());
-    _timer =
-        Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
-
     super.initState();
   }
 
   @override
   void dispose() {
     controller.dispose();
-    // _timer?.cancel();
     super.dispose();
   }
 
@@ -82,31 +67,36 @@ class _BelFirebasePageState extends State<BelFirebasePage>
                 bottom: 0,
                 left: 0,
                 right: 0,
-                // height: screenHeight(context) - appBarHeight(context) - statusBarHeight(context),
-                // width: screenWidth(context),
                 child: Container(
-                    padding: const EdgeInsets.only(
-                        top: 16, bottom: 0, left: 16, right: 16),
-                    child: TabBarView(
-                      controller: controller,
-                      children: [
-                        Tab1(firebaseDatabase: database,),
-                        Tab2(firebaseDatabase: database,),
-                      ],
-                    )),
+                  padding: const EdgeInsets.only(
+                      top: 16, bottom: 0, left: 16, right: 16),
+                  child: TabBarView(
+                    controller: controller,
+                    children: [
+                      Tab1(
+                        firebaseDatabase: database,
+                      ),
+                      Tab2(
+                        firebaseDatabase: database,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              // Nadifah
               Positioned(
-                // height: 0,
                 width: screenWidth(context),
                 bottom: 0,
                 child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(50)),
-                      color: ColorsTheme.primaryBrown,
-                    ),
-                    child: NextSchedule(firebaseDatabase: database,))
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(50)),
+                    color: ColorsTheme.primaryBrown,
+                  ),
+                  child: NextSchedule(
+                    firebaseDatabase: database,
+                  ),
+                ),
               ),
             ],
           ),
@@ -130,18 +120,6 @@ class _BelFirebasePageState extends State<BelFirebasePage>
         ),
       ),
     );
-  }
-
-  void _getTime() {
-    final DateTime now = DateTime.now();
-    final String formattedDateTime = _formatDateTime(now);
-    setState(() {
-      _timeString = formattedDateTime;
-    });
-  }
-
-  String _formatDateTime(DateTime dateTime) {
-    return DateFormat('EEEE, MM-dd-yyyy \nHH:mm:ss', 'id_ID').format(dateTime);
   }
 }
 
@@ -172,12 +150,14 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 decorationThickness: 2,
-                decoration: TextDecoration.underline),
+                decoration: TextDecoration.underline,),
           ),
           Expanded(
-            // child: _buildScheduleColumn(jadwal1),
-            child: GetScheduleDatabase(scheduleDay: jadwal1, firebaseDatabase: widget.firebaseDatabase,),
-          )
+            child: GetScheduleDatabase(
+              scheduleDay: jadwal1,
+              firebaseDatabase: widget.firebaseDatabase,
+            ),
+          ),
         ],
       ),
     );
@@ -211,11 +191,14 @@ class _Tab2State extends State<Tab2> with AutomaticKeepAliveClientMixin {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 decorationThickness: 2,
-                decoration: TextDecoration.underline),
+                decoration: TextDecoration.underline,),
           ),
           Expanded(
-            child: GetScheduleDatabase(scheduleDay: jadwal2, firebaseDatabase: widget.firebaseDatabase,),
-          )
+            child: GetScheduleDatabase(
+              scheduleDay: jadwal2,
+              firebaseDatabase: widget.firebaseDatabase,
+            ),
+          ),
         ],
       ),
     );
@@ -226,38 +209,23 @@ class GetScheduleDatabase extends StatefulWidget {
   final String scheduleDay;
   final FirebaseDatabase firebaseDatabase;
 
-  const GetScheduleDatabase({super.key, required this.scheduleDay, required this.firebaseDatabase});
+  const GetScheduleDatabase(
+      {super.key, required this.scheduleDay, required this.firebaseDatabase});
 
   @override
   State<GetScheduleDatabase> createState() => _GetScheduleDatabaseState();
 }
 
 class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
-  // final url =
-  //     "https://bel-sekolah-2-default-rtdb.asia-southeast1.firebasedatabase.app/";
-
-  // late FirebaseDatabase database;
   TimeOfDay? updateTime;
   late int selectedRadioTile;
 
-  // @override
-  // void initState() {
-  //   database =
-  //       FirebaseDatabase.instanceFor(app: Firebase.app(), databaseURL: url);
-  //   super.initState();
-  // }
-
   void updateScheduleTime(
-      int index, TimeOfDay? time, bool? statusAktif, Schedule oldSchedule) {
-    // Map<String, String> schedule = {};
-
-    // if (statusAktif != null) {
-    //   schedule['aktif'] = statusAktif.toString();
-    // } else {
-    //   schedule['jam'] = time!.hour.toString();
-    //   schedule['menit'] = time!.minute.toString();
-    // }
-
+    int index,
+    TimeOfDay? time,
+    bool? statusAktif,
+    Schedule oldSchedule,
+  ) {
     Schedule schedule;
 
     if (statusAktif != null) {
@@ -265,11 +233,10 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
           aktif: statusAktif, jam: oldSchedule.jam, menit: oldSchedule.menit);
     } else {
       schedule = Schedule(
-          aktif: oldSchedule.aktif, jam: time!.hour, menit: time!.minute);
+          aktif: oldSchedule.aktif, jam: time!.hour, menit: time.minute);
     }
 
-    Map<String, dynamic> scheduleJson =
-        schedule.toJson(); // Mengubah tipe data menjadi Map<String, dynamic>
+    Map<String, dynamic> scheduleJson = schedule.toJson();
 
     widget.firebaseDatabase
         .ref(widget.scheduleDay)
@@ -301,12 +268,11 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
           );
         },
       );
-    });
+    },);
   }
 
   Widget build(BuildContext context) {
     return Container(
-      // padding: EdgeInsets.only(bottom: 100),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
 /*        color: Colors.blue,
@@ -322,10 +288,9 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
         defaultChild: const Center(child: CircularProgressIndicator()),
         query: widget.firebaseDatabase.ref(widget.scheduleDay),
         itemBuilder: (context, snapshot, animation, index) {
-          // Map schedule = snapshot.value as Map;
-          // schedule['key'] = snapshot.key;
           final json = snapshot.value as Map<dynamic, dynamic>;
           final schedule = Schedule.fromJson(json);
+
           return listSchedule(schedule: schedule, index: index + 1);
         },
       ),
@@ -389,7 +354,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                             );
                           },
                         );
-                      });
+                      },);
                     },
                     child: Card(
                       margin: const EdgeInsets.all(4),
@@ -434,20 +399,30 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                             child: AlertDialog(
                               scrollable: true,
                               title: const Text("Status bel"),
-                              content:
-                                  StatefulBuilder(builder: (context, setState) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "($jamKe)",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14),
-                                    ),
-                                    RadioListTile(
-                                        title: const Text("True"),
-                                        value: 1,
+                              content: StatefulBuilder(
+                                builder: (context, setState) {
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "($jamKe)",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14),
+                                      ),
+                                      RadioListTile(
+                                          title: const Text("True"),
+                                          value: 1,
+                                          groupValue: selectedRadioTile,
+                                          onChanged: (val) {
+                                            print("Radio Tile pressed $val");
+                                            setState(() {
+                                              selectedRadioTile = val!;
+                                            });
+                                          }),
+                                      RadioListTile(
+                                        title: const Text("False"),
+                                        value: 2,
                                         groupValue: selectedRadioTile,
                                         onChanged: (val) {
                                           print("Radio Tile pressed $val");
@@ -455,23 +430,13 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                           setState(() {
                                             selectedRadioTile = val!;
                                           });
-                                        }),
-                                    RadioListTile(
-                                      title: const Text("False"),
-                                      value: 2,
-                                      groupValue: selectedRadioTile,
-                                      onChanged: (val) {
-                                        print("Radio Tile pressed $val");
-                                        // setSelectedRadioTile(val!);
-                                        setState(() {
-                                          selectedRadioTile = val!;
-                                        });
-                                      },
-                                      selected: false,
-                                    ),
-                                  ],
-                                );
-                              }),
+                                        },
+                                        selected: false,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -486,11 +451,12 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                         null,
                                         selectedRadioTile == 1 ? true : false,
                                         schedule);
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content:
-                                          Text("Berhasil mengubah status bel"),
-                                    ));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            "Berhasil mengubah status bel"),
+                                      ),
+                                    );
                                   },
                                   child: const Text('Ya'),
                                 ),
