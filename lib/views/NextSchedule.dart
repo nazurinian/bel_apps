@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bel_sekolah/colors/colors.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_database/ui/firebase_list.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -45,10 +46,54 @@ class _NextScheduleState extends State<NextSchedule> {
 
   @override
   void initState() {
+    // getData();
+    getDataRealtime();
     _updateTime();
     // _timeString = _formatDateTime(DateTime.now());
     // _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
     super.initState();
+  }
+
+  void getData() async {
+    DatabaseReference ref = widget.firebaseDatabase.ref("jadwal/senin-kamis");
+    DatabaseEvent event = await ref.once();
+    print(event.snapshot.value);
+  }
+
+  List<Schedule> schedules = [];
+
+  void getDataRealtime() async {
+    DatabaseReference ref = widget.firebaseDatabase.ref("jadwal/senin-kamis");
+    Stream<DatabaseEvent> stream = ref.onValue;
+    stream.listen((event) {
+      print(event.snapshot.value);
+      if (event.snapshot.value != null) {
+        setState(() {
+          schedules.clear();
+          // var data = event.snapshot.value;
+          // for (var i = 1; i < data.length; i++) {
+          //   schedules.add(Schedule.fromJson(data[i]));
+          // }
+          for (final data in event.snapshot.children) {
+            schedules.add(Schedule.fromJson(data.value as Map));
+          }
+        });
+      }
+
+      print("ini schedule jal: ${schedules[0].jam}");
+      // for (final child in event.snapshot.children) {
+      //   // Handle the post.
+      //   setState(() {
+      //     schedules.clear();
+      //     var data = event.snapshot.value;
+      //     for (var i = 1; i < data.length; i++) {
+      //       schedules.add(Schedule.fromJson(data[i]));
+      //     }
+      //   });
+      // }
+    }, onError: (error) {
+      print("error ambil data : $error");
+    });
   }
 
   @override
@@ -80,68 +125,175 @@ class _NextScheduleState extends State<NextSchedule> {
   //   }
   // }
 
-  Future<List<Schedule>> getSchedule() async {
-    DataSnapshot scheduleSnapshot =
-        await widget.firebaseDatabase.ref("jadwal/senin-kamis").get();
+  // Future<List<Schedule>> getSchedule() async {
+  //   DataSnapshot scheduleSnapshot =
+  //       await widget.firebaseDatabase.ref("jadwal/senin-kamis").get();
+  //
+  //   List<Schedule> fetchedSchedule = [];
+  //
+  //   if (scheduleSnapshot.value != null &&
+  //       scheduleSnapshot.value is List<dynamic>) {
+  //     List<dynamic> scheduleData = scheduleSnapshot.value as List<dynamic>;
+  //
+  //     scheduleData.forEach((value) {
+  //       if (value is Map<dynamic, dynamic>) {
+  //         // Membuat objek Schedule dari data yang diterima
+  //         Schedule schedule = Schedule(
+  //           aktif: value['aktif'] ?? false,
+  //           jam: value['jam'] ?? 0,
+  //           menit: value['menit'] ?? 0,
+  //         );
+  //         fetchedSchedule.add(schedule);
+  //       } else {
+  //         print("Invalid schedule data: $value"); // Handle invalid data
+  //       }
+  //     });
+  //   } else {
+  //     print("Invalid schedule data"); // Handle invalid data
+  //   }
+  //
+  //   return fetchedSchedule;
+  // }
 
-    List<Schedule> fetchedSchedule = [];
+  Widget getScheduleTitle(
+      CustomTime currentTime, int nextSchedule, List<Schedule> schedule) {
+    String belNow = "Diluar jadwal";
+    for (int i = 0; i < schedule.length; i++) {
+      int scheduleMinutes = (schedule[i].jam! * 60) + schedule[i].menit!;
 
-    if (scheduleSnapshot.value != null &&
-        scheduleSnapshot.value is List<dynamic>) {
-      List<dynamic> scheduleData = scheduleSnapshot.value as List<dynamic>;
-
-      scheduleData.forEach((value) {
-        if (value is Map<dynamic, dynamic>) {
-          // Membuat objek Schedule dari data yang diterima
-          Schedule schedule = Schedule(
-            aktif: value['aktif'] ?? false,
-            jam: value['jam'] ?? 0,
-            menit: value['menit'] ?? 0,
-          );
-          fetchedSchedule.add(schedule);
-        } else {
-          print("Invalid schedule data: $value"); // Handle invalid data
-        }
-      });
-    } else {
-      print("Invalid schedule data"); // Handle invalid data
+      if (currentTime.hours * 60 + currentTime.minutes <= scheduleMinutes) {
+        belNow = jamTitles[i + nextSchedule];
+      }
     }
 
-    return fetchedSchedule;
+    // Jika waktu saat ini setelah semua jadwal, kembalikan pesan di luar jadwal
+    return Text(belNow);
   }
+
+  Widget nextTimeSchedule(CustomTime currentTime, List<Schedule> schedule) {
+    int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
+
+    String nextBel = "----------------";
+
+    for (int i = 0; i < schedules.length; i++) {
+      int jadwalJam = schedule[i].jam!;
+      int jadwalMenit = schedule[i].menit!;
+
+      int scheduleMinutes = jadwalJam * 60 + jadwalMenit;
+
+      if (currentMinutes <= scheduleMinutes) {
+        nextBel = "Bel : $jadwalJam:$jadwalMenit";
+      }
+    }
+
+    return Text(nextBel);
+  }
+
+  // String getScheduleTitle(CustomTime currentTime, int nextSchedule, Schedule schedule) {
+  //   // Memeriksa jadwal yang sesuai dengan waktu saat ini
+  //   for (int i = 0; i < jamTitles.length; i++) {
+  //     int scheduleMinutes = (schedule.jam! * 60) + schedule.menit!;
+  //
+  //     if (currentTime.hours * 60 + currentTime.minutes <= scheduleMinutes) {
+  //       return jamTitles[i + nextSchedule];
+  //     }
+  //   }
+  //
+  //   // Jika waktu saat ini setelah semua jadwal, kembalikan pesan di luar jadwal
+  //   return "Diluar jadwal";
+  // }
+  //
+  // String nextTimeSchedule(CustomTime currentTime, Schedule schedule) {
+  //   int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
+  //
+  //   // Memeriksa jadwal yang sesuai dengan waktu saat ini
+  //   for (int i = 0; i < jamTitles.length; i++) {
+  //     int jadwalJam = schedule.jam!;
+  //     int jadwalMenit = schedule.menit!;
+  //
+  //     int scheduleMinutes = jadwalJam * 60 + jadwalMenit;
+  //
+  //     if (currentMinutes <= scheduleMinutes) {
+  //       return "Bel : $jadwalJam:$jadwalMenit";
+  //     }
+  //   }
+  //
+  //   return "----------------";
+  // }
+  Map<dynamic, dynamic>? _seninKamisJadwal;
+
+  // void _fetchData() {
+  //   widget.firebaseDatabase.ref("jadwal/").child(path)
+  //       .once()
+  //       .then((DataSnapshot snapshot) {
+  //     if (snapshot.value != null) {
+  //       setState(() {
+  //         _isLoading = false;
+  //         _seninKamisJadwal = snapshot.value;
+  //       });
+  //     }
+  //   }).catchError((error) {
+  //     print("Failed to fetch data: $error");
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return FirebaseAnimatedList(
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      defaultChild: const Center(child: CircularProgressIndicator()),
-      query: widget.firebaseDatabase.ref("jadwal/senin-kamis"),
-      itemBuilder: (context, snapshot, animation, index) {
-        final json = snapshot.value as Map<dynamic, dynamic>;
-        final schedule = Schedule.fromJson(json);
-
-        if (index == 0) {
-          return Column(
-            children: [
-              Center(
-                child: Text(
-                  _currentTime.getAllTime(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: ColorsTheme.lightBackground),
-                ),
-              ),
-              const Text(
-                  "STATIC ITEM TO DISPLAY ON TOP AS A HEADER FOR BELOW FIREBAE LIST"),
-            ],
-          );
-        } else {
-          return Container();
-        }
-      },
+    return Center(
+      child: Column(
+        children: [
+          Text(
+            _currentTime.getAllTime(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: ColorsTheme.lightBackground),
+          ),
+          getScheduleTitle(_currentTime, 0, schedules),
+          nextTimeSchedule(_currentTime, schedules),
+        ],
+      ),
     );
+    // return FirebaseList(query: query);
+    // return FirebaseAnimatedList(
+    //   shrinkWrap: true,
+    //   physics: const BouncingScrollPhysics(),
+    //   defaultChild: const Center(child: CircularProgressIndicator()),
+    //   query: widget.firebaseDatabase.ref("jadwal/senin-kamis"),
+    //   itemBuilder: (context, snapshot, animation, index) {
+    //     final json = snapshot.value as Map<dynamic, dynamic>;
+    //     final schedule = Schedule.fromJson(json);
+
+    // if (index >= 0 && index <= 15) {
+    //   return Column(
+    //     children: [
+    //       Center(
+    //         child: Text(
+    //           _currentTime.getAllTime(),
+    //           textAlign: TextAlign.center,
+    //           style: TextStyle(
+    //               fontWeight: FontWeight.bold,
+    //               color: ColorsTheme.lightBackground),
+    //         ),
+    //       ),
+    //       Text(nextTimeSchedule(_currentTime, schedule)),
+    //       Text(getScheduleTitle(_currentTime, 0, schedule)),
+    //       // const Text(
+    //       //     "STATIC ITEM TO DISPLAY ON TOP AS A HEADER FOR BELOW FIREBAE LIST"),
+    //     ],
+    //   );
+    // } else {
+    //       return Column(
+    //         children: [
+    //           nextTimeSchedule(_currentTime, schedule),
+    //           getScheduleTitle(_currentTime, 0, schedule),
+    //         ],
+    //       );
+    //     // }
+    //   },
+    // );
     // if (schedule.jam == 8 && schedule.menit == 0) {
     //   return Text("schedule.jam.toString()");
     // } else {
@@ -278,15 +430,15 @@ class _NextScheduleState extends State<NextSchedule> {
   }
 
   /// untuk mengambil waktu saat ini
-  // void _getTime() {
-  //   final DateTime now = DateTime.now();
-  //   final String formattedDateTime = _formatDateTime(now);
-  //   setState(() {
-  //     _timeString = formattedDateTime;
-  //   });
-  // }
+// void _getTime() {
+//   final DateTime now = DateTime.now();
+//   final String formattedDateTime = _formatDateTime(now);
+//   setState(() {
+//     _timeString = formattedDateTime;
+//   });
+// }
 
-  // String _formatDateTime(DateTime dateTime) {
-  //   return DateFormat('EEEE, MM-dd-yyyy \nHH:mm:ss', 'id_ID').format(dateTime);
-  // }
+// String _formatDateTime(DateTime dateTime) {
+//   return DateFormat('EEEE, MM-dd-yyyy \nHH:mm:ss', 'id_ID').format(dateTime);
+// }
 }
