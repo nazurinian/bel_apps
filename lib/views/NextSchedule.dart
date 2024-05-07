@@ -20,7 +20,7 @@ class _NextScheduleState extends State<NextSchedule> {
   late Timer _timer;
   late CustomTime _currentTime;
 
-  Map<dynamic, dynamic>? _data;
+  // Map<dynamic, dynamic>? _data;
   final List<String> jamTitles = [
     "Literasi Pagi",
     "Masuk jam ke-1",
@@ -34,9 +34,9 @@ class _NextScheduleState extends State<NextSchedule> {
     "Masuk jam ke-8",
     "Masuk jam ke-9",
     "Masuk jam ke-10",
+    "Istirahat ke-2",
     "Masuk jam ke-11",
     "Masuk jam ke-12",
-    "Istirahat ke-2",
     "Waktu pulang"
   ];
 
@@ -47,10 +47,10 @@ class _NextScheduleState extends State<NextSchedule> {
     super.initState();
   }
 
-  void getData() async {
-    DatabaseReference ref = widget.firebaseDatabase.ref("jadwal/senin-kamis");
-    DatabaseEvent event = await ref.once();
-  }
+  // void getData() async {
+  //   DatabaseReference ref = widget.firebaseDatabase.ref("jadwal/senin-kamis");
+  //   DatabaseEvent event = await ref.once();
+  // }
 
   List<Schedule> schedules = [];
 
@@ -88,13 +88,26 @@ class _NextScheduleState extends State<NextSchedule> {
   }
 
   Widget getScheduleTitle(
-      CustomTime currentTime, int nextSchedule, List<Schedule> schedule) {
-    String belNow = "Diluar jadwal";
+      CustomTime currentTime, List<Schedule> schedule) {
+    String belNow = "";
+    int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
+
     for (int i = 0; i < schedule.length; i++) {
       int scheduleMinutes = (schedule[i].jam! * 60) + schedule[i].menit!;
+      int firstScheduleMinutes = (schedule[0].jam! * 60) + schedule[0].menit!;
+      int lastScheduleMinutes = (schedule[15].jam! * 60) + schedule[15].menit!;
 
-      if (currentTime.hours * 60 + currentTime.minutes <= scheduleMinutes) {
-        belNow = jamTitles[i + nextSchedule];
+      if (currentMinutes < firstScheduleMinutes) {
+        belNow = "Belum masuk";
+        break;
+      } else {
+        if (currentMinutes >= lastScheduleMinutes + 60) {
+          belNow = "Diluar jadwal";
+        } else {
+          if (currentMinutes >= scheduleMinutes) {
+            belNow = jamTitles[i];
+          }
+        }
       }
     }
 
@@ -111,16 +124,27 @@ class _NextScheduleState extends State<NextSchedule> {
   Widget nextTimeSchedule(CustomTime currentTime, List<Schedule> schedule) {
     int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
 
-    String nextBel = "---";
+    String nextBel = "";
 
     for (int i = 0; i < schedules.length; i++) {
       int jadwalJam = schedule[i].jam!;
       int jadwalMenit = schedule[i].menit!;
 
       int scheduleMinutes = jadwalJam * 60 + jadwalMenit;
+      int firstScheduleMinutes = (schedule[0].jam! * 60) + schedule[0].menit!;
+      int lastScheduleMinutes = (schedule[15].jam! * 60) + schedule[15].menit!;
 
-      if (currentMinutes <= scheduleMinutes) {
-        nextBel = "Bel : $jadwalJam:$jadwalMenit";
+      if (currentMinutes < firstScheduleMinutes) {
+        nextBel = "${_formathm(schedule[0].jam!)}:${_formathm(schedule[0].menit!)}";
+        break;
+      } else {
+        if (currentMinutes >= lastScheduleMinutes) {
+          nextBel = "---";
+        } else {
+          if (currentMinutes >= scheduleMinutes) {
+            nextBel = "${_formathm(schedule[i+1].jam!)}:${_formathm(schedule[i+1].menit!)}";
+          }
+        }
       }
     }
 
@@ -142,7 +166,7 @@ class _NextScheduleState extends State<NextSchedule> {
         children: [
           SizedBox(
               width: screenWidth(context) * 0.3,
-              child: getScheduleTitle(_currentTime, 0, schedules)),
+              child: getScheduleTitle(_currentTime, schedules)),
           SizedBox(
             width: screenWidth(context) * 0.3,
             child: Text(
@@ -160,5 +184,9 @@ class _NextScheduleState extends State<NextSchedule> {
         ],
       ),
     );
+  }
+
+  String _formathm(int hm) {
+    return hm.toString().padLeft(2, '0');
   }
 }
