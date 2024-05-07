@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-
 import 'package:bel_sekolah/themes/colors/Colors.dart';
 
 class ChatPage extends StatefulWidget {
@@ -44,7 +43,6 @@ class _ChatPage extends State<ChatPage> {
     super.initState();
 
     BluetoothConnection.toAddress(widget.server.address).then((_connection) {
-      print('Connected to the device');
       connection = _connection;
       setState(() {
         isConnecting = false;
@@ -59,17 +57,16 @@ class _ChatPage extends State<ChatPage> {
         // If we except the disconnection, `onDone` should be fired as result.
         // If we didn't except this (no flag set), it means closing by remote.
         if (isDisconnecting) {
-          print('Disconnecting locally!');
+          Fluttertoast.showToast(msg: 'Disconnecting locally!', toastLength: Toast.LENGTH_SHORT);
         } else {
-          print('Disconnected remotely!');
+          Fluttertoast.showToast(msg: 'Disconnected remotely!', toastLength: Toast.LENGTH_SHORT);
         }
         if (this.mounted) {
           setState(() {});
         }
       });
     }).catchError((error) {
-      print('Cannot connect, exception occured');
-      print(error);
+      Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
     });
   }
 
@@ -251,6 +248,7 @@ class _ChatPage extends State<ChatPage> {
               curve: Curves.easeOut);
         });
       } catch (e) {
+        Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
         // Ignore error, but notify state
         setState(() {});
       }

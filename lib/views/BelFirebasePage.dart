@@ -247,14 +247,12 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
         .child(index.toString())
         .update(scheduleJson)
         .then((_) {
-      print('Berhasil memperbarui bel');
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Berhasil memperbarui bel"),
       ));
     }).catchError(
       (error) {
-        print('Error: $error');
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -332,7 +330,6 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                         int.parse(jam),
                         int.parse(menit),
                         (TimeOfDay selectedTime) {
-                          print('Selected time: $selectedTime');
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -410,7 +407,6 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                           value: 1,
                                           groupValue: selectedRadioTile,
                                           onChanged: (val) {
-                                            print("Radio Tile pressed $val");
                                             setState(() {
                                               selectedRadioTile = val!;
                                             });
@@ -420,7 +416,6 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                         value: 2,
                                         groupValue: selectedRadioTile,
                                         onChanged: (val) {
-                                          print("Radio Tile pressed $val");
                                           // setSelectedRadioTile(val!);
                                           setState(() {
                                             selectedRadioTile = val!;

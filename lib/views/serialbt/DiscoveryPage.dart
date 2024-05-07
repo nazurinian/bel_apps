@@ -141,7 +141,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: const Text('Error occured while bonding'),
-                      content: Text("${ex.toString()}"),
+                      content: Text(ex.toString()),
                       actions: <Widget>[
                         TextButton(
                           child: const Text("Close"),

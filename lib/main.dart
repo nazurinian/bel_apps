@@ -12,10 +12,8 @@ void main() async {
   if (FirebaseAuth.instance.currentUser != null) {
     await initializeDateFormatting('id_ID', null)
         .then((_) => runApp(const MyApp()));
-    print('id login: ${FirebaseAuth.instance.currentUser!.uid}');
   } else {
     await FirebaseAuth.instance.signInAnonymously();
-    print('id login: ${FirebaseAuth.instance.currentUser!.uid}');
   }
 }
 

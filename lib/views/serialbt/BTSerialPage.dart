@@ -268,7 +268,6 @@ class _BTSerialPage extends State<BTSerialPage> {
                   if (value) {
                     FlutterBluetoothSerial.instance.setPairingRequestHandler(
                         (BluetoothPairingRequest request) {
-                      print("Trying to auto-pair with Pin 1234");
                       if (request.pairingVariant == PairingVariant.Pin) {
                         return Future.value("1234");
                       }
@@ -294,10 +293,7 @@ class _BTSerialPage extends State<BTSerialPage> {
                       );
 
                       if (selectedDevice != null) {
-                        print(
-                            'Discovery -> selected ' + selectedDevice.address);
                       } else {
-                        print('Discovery -> no device selected');
                       }
                     }),
               ),
@@ -316,10 +312,8 @@ class _BTSerialPage extends State<BTSerialPage> {
                     );
 
                     if (selectedDevice != null) {
-                      print('Connect -> selected ' + selectedDevice.address);
                       _startChat(context, selectedDevice);
                     } else {
-                      print('Connect -> no device selected');
                     }
                   },
                 ),

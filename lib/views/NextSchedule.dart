@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:bel_sekolah/themes/colors/Colors.dart';
 import 'package:bel_sekolah/models/ScheduleModel.dart';
 import 'package:firebase_database/firebase_database.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import '../models/TimeNowModel.dart';
 
 class NextSchedule extends StatefulWidget {
@@ -50,7 +50,6 @@ class _NextScheduleState extends State<NextSchedule> {
   void getData() async {
     DatabaseReference ref = widget.firebaseDatabase.ref("jadwal/senin-kamis");
     DatabaseEvent event = await ref.once();
-    print(event.snapshot.value);
   }
 
   List<Schedule> schedules = [];
@@ -59,7 +58,6 @@ class _NextScheduleState extends State<NextSchedule> {
     DatabaseReference ref = widget.firebaseDatabase.ref("jadwal/senin-kamis");
     Stream<DatabaseEvent> stream = ref.onValue;
     stream.listen((event) {
-      print(event.snapshot.value);
       if (event.snapshot.value != null) {
         setState(() {
           schedules.clear();
@@ -69,9 +67,8 @@ class _NextScheduleState extends State<NextSchedule> {
         });
       }
 
-      print("ini schedule jal: ${schedules[0].jam}");
     }, onError: (error) {
-      print("error ambil data : $error");
+      Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
     });
   }
 
