@@ -1,13 +1,13 @@
-import 'package:bel_sekolah/models/schedule.dart';
-import 'package:bel_sekolah/utils/network_connectivity.dart';
-import 'package:bel_sekolah/utils/size.dart';
+import 'package:bel_sekolah/models/ScheduleModel.dart';
+import 'package:bel_sekolah/utils/NetworkConnectivity.dart';
+import 'package:bel_sekolah/utils/DisplaySize.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import '../colors/colors.dart';
-import '../utils/time_picker.dart';
+import 'package:bel_sekolah/themes/colors/Colors.dart';
 import 'package:bel_sekolah/views/NextSchedule.dart';
+import '../utils/TimePicker.dart';
 
 class BelFirebasePage extends StatefulWidget {
   const BelFirebasePage({super.key});
@@ -147,10 +147,11 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin {
           const Text(
             "Jadwal Senin-Kamis",
             style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                decorationThickness: 2,
-                decoration: TextDecoration.underline,),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              decorationThickness: 2,
+              decoration: TextDecoration.underline,
+            ),
           ),
           Expanded(
             child: GetScheduleDatabase(
@@ -188,10 +189,11 @@ class _Tab2State extends State<Tab2> with AutomaticKeepAliveClientMixin {
           const Text(
             "Jadwal Jum'at",
             style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                decorationThickness: 2,
-                decoration: TextDecoration.underline,),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              decorationThickness: 2,
+              decoration: TextDecoration.underline,
+            ),
           ),
           Expanded(
             child: GetScheduleDatabase(
@@ -248,38 +250,35 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Berhasil memperbarui bel"),
       ));
-    }).catchError((error) {
-      print('Error: $error');
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            scrollable: true,
-            title: const Text('Error'),
-            content: Text('Terjadi kesalahan saat memperbarui bel: $error'),
-            actions: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    },);
+    }).catchError(
+      (error) {
+        print('Error: $error');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              scrollable: true,
+              title: const Text('Error'),
+              content: Text('Terjadi kesalahan saat memperbarui bel: $error'),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-/*        color: Colors.blue,
-        border: Border.all(
-          color: Colors.black,
-          width: 1.0,
-        ),*/
       ),
       child: FirebaseAnimatedList(
         shrinkWrap: true,
@@ -323,38 +322,42 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
                     onTap: () {
-                      Waktu.customTime(
-                          context, jamKe, int.parse(jam), int.parse(menit),
-                          (TimeOfDay selectedTime) {
-                        print('Selected time: $selectedTime');
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              scrollable: true,
-                              title: const Text('Waktu yang Dipilih'),
-                              content: Text(
-                                'Jam: ${_formathm(selectedTime.hour)}:${_formathm(selectedTime.minute)}',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    updateScheduleTime(
-                                        index, selectedTime, null, schedule);
-                                  },
-                                  child: const Text('Ya'),
+                      TimePicker.customTime(
+                        context,
+                        jamKe,
+                        int.parse(jam),
+                        int.parse(menit),
+                        (TimeOfDay selectedTime) {
+                          print('Selected time: $selectedTime');
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                scrollable: true,
+                                title: const Text('Waktu yang Dipilih'),
+                                content: Text(
+                                  'Jam: ${_formathm(selectedTime.hour)}:${_formathm(selectedTime.minute)}',
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Tidak'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },);
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Tidak'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      updateScheduleTime(
+                                          index, selectedTime, null, schedule);
+                                    },
+                                    child: const Text('Ya'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
                     },
                     child: Card(
                       margin: const EdgeInsets.all(4),
@@ -384,18 +387,6 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                           bool statusVal = bool.parse(aktif);
                           selectedRadioTile = statusVal ? 1 : 2;
                           return SafeArea(
-                            // child: Theme(
-                            // data: ThemeData.light().copyWith(
-                            //   dividerColor: ColorsTheme.gray,
-                            //   textTheme: TextTheme(
-                            //     bodyText2: TextStyle(color: ColorsTheme.black),
-                            //   ),
-                            //   colorScheme: ColorScheme.fromSwatch().copyWith(
-                            //     primary: ColorsTheme.orange,
-                            //     onSurface: ColorsTheme.black,
-                            //     onPrimary: ColorsTheme.orange,
-                            //   ),
-                            // ),
                             child: AlertDialog(
                               scrollable: true,
                               title: const Text("Status bel"),
@@ -447,15 +438,10 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                 TextButton(
                                   onPressed: () {
                                     updateScheduleTime(
-                                        index,
-                                        null,
-                                        selectedRadioTile == 1 ? true : false,
-                                        schedule);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            "Berhasil mengubah status bel"),
-                                      ),
+                                      index,
+                                      null,
+                                      selectedRadioTile == 1 ? true : false,
+                                      schedule,
                                     );
                                   },
                                   child: const Text('Ya'),

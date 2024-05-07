@@ -28,7 +28,6 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
   }
 
   Future<void> requestPermission() async {
-    // Periksa status izin Bluetooth dan izin lokasi
     Map<Permission, PermissionStatus> statuses = await [
       Permission.bluetooth,
       Permission.bluetoothScan,
@@ -37,7 +36,6 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
       Permission.location,
     ].request();
 
-    // Periksa setiap status izin
     statuses.forEach(
       (permission, status) {
         if (permission == Permission.location) {
@@ -69,7 +67,7 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
     if (!permissionsRequested) {
       return const Center(
           child:
-              CircularProgressIndicator()); // Menampilkan indikator loading saat permintaan izin sedang berjalan
+              CircularProgressIndicator());
     }
 
     return (locationGranted && bluetoothGranted)
@@ -80,35 +78,11 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                     child:
-                        CircularProgressIndicator()); // Menampilkan indikator loading saat memuat widget notPermittedBuilder
+                        CircularProgressIndicator());
               }
               return snapshot.data ??
-                  Container(); // Mengembalikan widget dari future
+                  Container();
             },
           );
   }
 }
-
-// Memeriksa status izin Bluetooth dan lokasi
-// statuses.forEach((permission, status) {
-// if (permission == Permission.location) {
-// if (status.isGranted) {
-// locationGranted = true;
-// }
-// } else if (permission == Permission.bluetooth) {
-// if (status.isGranted) {
-// bluetoothGranted = true;
-// }
-// }
-// });
-//
-// // Memeriksa status izin dan mengembalikan widget sesuai
-// // if (locationGranted && bluetoothGranted) {
-// //   return permittedBuilder();
-// // } else {
-// //   return notPermittedBuilder(statuses);
-// // }
-//
-// return (locationGranted && bluetoothGranted)
-// ? widget.permittedBuilder()
-//     : widget.notPermittedBuilder();

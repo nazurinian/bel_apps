@@ -8,8 +8,6 @@ import './ChatPage.dart';
 import './DiscoveryPage.dart';
 import './SelectBondedDevicePage.dart';
 
-// import './helpers/LineChart.dart';
-
 class BTSerialPage extends StatefulWidget {
   const BTSerialPage({super.key});
 

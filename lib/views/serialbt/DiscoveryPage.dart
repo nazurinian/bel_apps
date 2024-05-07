@@ -93,7 +93,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
               : IconButton(
                   icon: const Icon(Icons.replay),
                   onPressed: _restartDiscovery,
-                )
+                ),
         ],
       ),
       body: ListView.builder(

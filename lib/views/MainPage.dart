@@ -3,7 +3,7 @@ import 'package:bel_sekolah/views/serialbt/BTSerialPage.dart';
 import 'package:bel_sekolah/views/BelFirebasePage.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -90,10 +90,10 @@ class _MainPageState extends State<MainPage> {
                               (Set<MaterialState> states) {
                                 if (states.contains(MaterialState.pressed)) {
                                   return Colors.green.withOpacity(
-                                      0.2); // Warna latar belakang saat ditekan
+                                      0.2);
                                 }
                                 return Colors
-                                    .white; // Tidak ada overlay color ketika tidak ditekan
+                                    .white;
                               },
                             ),
                           ),
@@ -154,10 +154,10 @@ class _MainPageState extends State<MainPage> {
                               (Set<MaterialState> states) {
                                 if (states.contains(MaterialState.pressed)) {
                                   return Colors.green.withOpacity(
-                                      0.2); // Warna latar belakang saat ditekan
+                                      0.2);
                                 }
                                 return Colors
-                                    .white; // Tidak ada overlay color ketika tidak ditekan
+                                    .white;
                               },
                             ),
                           ),

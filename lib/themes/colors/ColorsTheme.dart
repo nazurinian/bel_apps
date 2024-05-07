@@ -1,4 +1,4 @@
-part of 'colors.dart';
+part of 'Colors.dart';
 
 class ColorsTheme {
   static Color standartBrown = const Color(0xff4F342F);

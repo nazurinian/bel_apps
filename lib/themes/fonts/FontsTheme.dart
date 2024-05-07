@@ -1,4 +1,4 @@
-part of 'fonts.dart';
+part of 'Fonts.dart';
 
 class FontTheme {
   // static TextStyle mulishSize10({required Color color}) => TextStyle(
@@ -43,33 +43,6 @@ class FontTheme {
   // static TextStyle mulishSize18Bold({required Color color}) => TextStyle(
   //   fontFamily: 'Mulish',
   //   fontSize: 18,
-  //   fontWeight: FontWeight.bold,
-  //   color: color,
-  // );
-  // static TextStyle mulishSize24({required Color color}) => TextStyle(
-  //   fontFamily: 'Mulish',
-  //   fontSize: 24,
-  //   color: color,
-  // );
-  // static TextStyle mulishSize36({required Color color}) => TextStyle(
-  //   fontFamily: 'Mulish',
-  //   fontSize: 36,
-  //   color: color,
-  // );
-  // static TextStyle mulishSize36Bold({required Color color}) => TextStyle(
-  //   fontFamily: 'Mulish',
-  //   fontSize: 36,
-  //   fontWeight: FontWeight.bold,
-  //   color: color,
-  // );
-  // static TextStyle mulishSize46({required Color color}) => TextStyle(
-  //   fontFamily: 'Mulish',
-  //   fontSize: 46,
-  //   color: color,
-  // );
-  // static TextStyle mulishSize46Bold({required Color color}) => TextStyle(
-  //   fontFamily: 'Mulish',
-  //   fontSize: 46,
   //   fontWeight: FontWeight.bold,
   //   color: color,
   // );

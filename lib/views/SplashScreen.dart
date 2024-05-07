@@ -1,5 +1,5 @@
-import 'MainPage.dart';
 import 'package:flutter/material.dart';
+import 'MainPage.dart';
 import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
@@ -10,6 +10,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
   void initState() {
     super.initState();
     splashscreenStart();
@@ -17,12 +18,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   splashscreenStart() async {
     var duration = const Duration(seconds: 3);
-    return Timer(duration, () {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const MainPage()),
-          (route) => false);
-    });
+    return Timer(
+      duration,
+      () {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const MainPage()),
+            (route) => false);
+      },
+    );
   }
 
   @override
