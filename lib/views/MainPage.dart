@@ -15,6 +15,12 @@ class _MainPageState extends State<MainPage> {
   bool isJadwalPressed = false;
   bool isBelManualPressed = false;
 
+  void allButtonAreValse() {
+    isBluetoothPressed = false;
+    isJadwalPressed = false;
+    isBelManualPressed = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,16 +68,12 @@ class _MainPageState extends State<MainPage> {
                       },
                       onTapUp: (_) {
                         setState(() {
-                          isBluetoothPressed = false;
-                          isJadwalPressed = false;
-                          isBelManualPressed = false;
+                          allButtonAreValse();
                         });
                       },
                       onTapCancel: () {
                         setState(() {
-                          isBluetoothPressed = false;
-                          isJadwalPressed = false;
-                          isBelManualPressed = false;
+                          allButtonAreValse();
                         });
                       },
                       child: AnimatedContainer(
@@ -129,16 +131,12 @@ class _MainPageState extends State<MainPage> {
                       },
                       onTapUp: (_) {
                         setState(() {
-                          isJadwalPressed = false;
-                          isBluetoothPressed = false;
-                          isBelManualPressed = false;
+                          allButtonAreValse();
                         });
                       },
                       onTapCancel: () {
                         setState(() {
-                          isJadwalPressed = false;
-                          isBluetoothPressed = false;
-                          isBelManualPressed = false;
+                          allButtonAreValse();
                         });
                       },
                       child: AnimatedContainer(
@@ -198,16 +196,12 @@ class _MainPageState extends State<MainPage> {
                   },
                   onTapUp: (_) {
                     setState(() {
-                      isBelManualPressed = false;
-                      isJadwalPressed = false;
-                      isBluetoothPressed = false;
+                      allButtonAreValse();
                     });
                   },
                   onTapCancel: () {
                     setState(() {
-                      isBelManualPressed = false;
-                      isJadwalPressed = false;
-                      isBluetoothPressed = false;
+                      allButtonAreValse();
                     });
                   },
                   child: AnimatedContainer(

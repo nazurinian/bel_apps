@@ -11,7 +11,7 @@ class PutarManualPage extends StatefulWidget {
 
 class _PutarManualPageState extends State<PutarManualPage> {
   DatabaseReference ref =
-      FirebaseDatabase.instance.ref('putar-manual/').child('eputar');
+      FirebaseDatabase.instance.ref('putar-manual/').child('putar');
   bool _switchValue = false;
   bool _isLoading = true;
 
