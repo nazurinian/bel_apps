@@ -83,7 +83,7 @@ class _BTSerialPage extends State<BTSerialPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Bluetooth Serial'),
+        title: const Text('Bluetooth Serial'),
       ),
       body: PermissionHandlerWidget(
         notPermittedBuilder: () async {

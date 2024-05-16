@@ -20,7 +20,6 @@ class _NextScheduleState extends State<NextSchedule> {
   late Timer _timer;
   late CustomTime _currentTime;
 
-  // Map<dynamic, dynamic>? _data;
   final List<String> jamTitles = [
     "Literasi Pagi",
     "Masuk jam ke-1",
@@ -46,11 +45,6 @@ class _NextScheduleState extends State<NextSchedule> {
     _updateTime();
     super.initState();
   }
-
-  // void getData() async {
-  //   DatabaseReference ref = widget.firebaseDatabase.ref("jadwal/senin-kamis");
-  //   DatabaseEvent event = await ref.once();
-  // }
 
   List<Schedule> schedules = [];
 

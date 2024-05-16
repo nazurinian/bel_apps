@@ -1,3 +1,4 @@
+import 'package:bel_sekolah/views/PutarManualPage.dart';
 import 'package:flutter/material.dart';
 import 'package:bel_sekolah/views/serialbt/BTSerialPage.dart';
 import 'package:bel_sekolah/views/BelFirebasePage.dart';
@@ -12,6 +13,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   bool isBluetoothPressed = false;
   bool isJadwalPressed = false;
+  bool isBelManualPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,27 +57,30 @@ class _MainPageState extends State<MainPage> {
                         setState(() {
                           isBluetoothPressed = true;
                           isJadwalPressed = false;
+                          isBelManualPressed = false;
                         });
                       },
                       onTapUp: (_) {
                         setState(() {
                           isBluetoothPressed = false;
                           isJadwalPressed = false;
+                          isBelManualPressed = false;
                         });
                       },
                       onTapCancel: () {
                         setState(() {
                           isBluetoothPressed = false;
                           isJadwalPressed = false;
+                          isBelManualPressed = false;
                         });
                       },
                       child: AnimatedContainer(
                         height: isBluetoothPressed
                             ? 250
-                            : (isJadwalPressed ? 50 : 100),
+                            : (isJadwalPressed || isBelManualPressed ? 50 : 100),
                         width: isBluetoothPressed
                             ? 170
-                            : (isJadwalPressed ? 120 : 150),
+                            : (isJadwalPressed || isBelManualPressed ? 120 : 150),
                         duration: const Duration(milliseconds: 300),
                         child: OutlinedButton(
                           style: ButtonStyle(
@@ -84,12 +89,12 @@ class _MainPageState extends State<MainPage> {
                               borderRadius: BorderRadius.circular(10),
                             )),
                             side: MaterialStateProperty.all(
-                                const BorderSide(color: Colors.green)),
+                                const BorderSide(color: Colors.redAccent)),
                             overlayColor:
                                 MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                                 if (states.contains(MaterialState.pressed)) {
-                                  return Colors.green.withOpacity(
+                                  return Colors.redAccent.withOpacity(
                                       0.2);
                                 }
                                 return Colors
@@ -119,27 +124,30 @@ class _MainPageState extends State<MainPage> {
                         setState(() {
                           isJadwalPressed = true;
                           isBluetoothPressed = false;
+                          isBelManualPressed = false;
                         });
                       },
                       onTapUp: (_) {
                         setState(() {
                           isJadwalPressed = false;
                           isBluetoothPressed = false;
+                          isBelManualPressed = false;
                         });
                       },
                       onTapCancel: () {
                         setState(() {
                           isJadwalPressed = false;
                           isBluetoothPressed = false;
+                          isBelManualPressed = false;
                         });
                       },
                       child: AnimatedContainer(
                         height: isJadwalPressed
                             ? 250
-                            : (isBluetoothPressed ? 50 : 100),
+                            : (isBluetoothPressed || isBelManualPressed ? 50 : 100),
                         width: isJadwalPressed
                             ? 170
-                            : (isBluetoothPressed ? 120 : 150),
+                            : (isBluetoothPressed || isBelManualPressed ? 120 : 150),
                         duration: const Duration(milliseconds: 300),
                         child: OutlinedButton(
                           style: ButtonStyle(
@@ -178,6 +186,73 @@ class _MainPageState extends State<MainPage> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTapDown: (_) {
+                    setState(() {
+                      isBelManualPressed = true;
+                      isJadwalPressed = false;
+                      isBluetoothPressed = false;
+                    });
+                  },
+                  onTapUp: (_) {
+                    setState(() {
+                      isBelManualPressed = false;
+                      isJadwalPressed = false;
+                      isBluetoothPressed = false;
+                    });
+                  },
+                  onTapCancel: () {
+                    setState(() {
+                      isBelManualPressed = false;
+                      isJadwalPressed = false;
+                      isBluetoothPressed = false;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    height: isBelManualPressed
+                        ? 250
+                        : ((isBluetoothPressed || isJadwalPressed) ? 50 : 100),
+                    width: isBelManualPressed
+                        ? 170
+                        : ((isBluetoothPressed || isJadwalPressed) ? 120 : 150),
+                    duration: const Duration(milliseconds: 300),
+                    child: OutlinedButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                        side: MaterialStateProperty.all(
+                            const BorderSide(color: Colors.blueAccent)),
+                        overlayColor:
+                        MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.blueAccent.withOpacity(
+                                  0.2);
+                            }
+                            return Colors
+                                .white;
+                          },
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PutarManualPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Putar manual",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black87),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
