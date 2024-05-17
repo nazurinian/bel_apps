@@ -41,15 +41,23 @@ class _NextScheduleState extends State<NextSchedule> {
 
   @override
   void initState() {
-    getDataRealtime();
     _updateTime();
+    getDataRealtime();
     super.initState();
   }
 
   List<Schedule> schedules = [];
+  String hariNormal = "jadwal/senin-kamis";
+  String hariJumat = "jadwal/jumat";
 
   void getDataRealtime() async {
-    DatabaseReference ref = widget.firebaseDatabase.ref("jadwal/senin-kamis");
+    String dayNameRef = "jadwal/senin-kamis";
+    int hariIni = _currentTime.weekday;
+    if (hariIni == 5) {
+      dayNameRef = hariJumat;
+    }
+
+    DatabaseReference ref = widget.firebaseDatabase.ref(dayNameRef);
     Stream<DatabaseEvent> stream = ref.onValue;
     stream.listen((event) {
       if (event.snapshot.value != null) {
@@ -82,25 +90,30 @@ class _NextScheduleState extends State<NextSchedule> {
 
   Widget getScheduleTitle(CustomTime currentTime, List<Schedule> schedule) {
     String belNow = "";
-    int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
 
-    for (int i = 0; i < schedule.length; i++) {
-      int scheduleMinutes = (schedule[i].jam! * 60) + schedule[i].menit!;
-      int firstScheduleMinutes = (schedule[0].jam! * 60) + schedule[0].menit!;
-      int lastScheduleMinutes = (schedule[15].jam! * 60) + schedule[15].menit!;
+    if (currentTime.weekday >= 1 && currentTime.weekday <= 5) {
+      int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
 
-      if (currentMinutes < firstScheduleMinutes) {
-        belNow = "Belum masuk";
-        break;
-      } else {
-        if (currentMinutes >= lastScheduleMinutes + 60) {
-          belNow = "Diluar jadwal";
+      for (int i = 0; i < schedule.length; i++) {
+        int scheduleMinutes = (schedule[i].jam! * 60) + schedule[i].menit!;
+        int firstScheduleMinutes = (schedule[0].jam! * 60) + schedule[0].menit!;
+        int lastScheduleMinutes = (schedule[15].jam! * 60) + schedule[15].menit!;
+
+        if (currentMinutes < firstScheduleMinutes) {
+          belNow = "Belum masuk";
+          break;
         } else {
-          if (currentMinutes >= scheduleMinutes) {
-            belNow = jamTitles[i];
+          if (currentMinutes >= lastScheduleMinutes + 60) {
+            belNow = "Diluar jadwal";
+          } else {
+            if (currentMinutes >= scheduleMinutes) {
+              belNow = jamTitles[i];
+            }
           }
         }
       }
+    } else if (currentTime.weekday == 6 || currentTime.weekday == 7) {
+      belNow = 'Hari Libur';
     }
 
     return Text(
@@ -114,32 +127,38 @@ class _NextScheduleState extends State<NextSchedule> {
   }
 
   Widget nextTimeSchedule(CustomTime currentTime, List<Schedule> schedule) {
-    int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
-
     String nextBel = "";
 
-    for (int i = 0; i < schedules.length; i++) {
-      int jadwalJam = schedule[i].jam!;
-      int jadwalMenit = schedule[i].menit!;
+    if (currentTime.weekday >= 1 && currentTime.weekday <= 5) {
+      int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
 
-      int scheduleMinutes = jadwalJam * 60 + jadwalMenit;
-      int firstScheduleMinutes = (schedule[0].jam! * 60) + schedule[0].menit!;
-      int lastScheduleMinutes = (schedule[15].jam! * 60) + schedule[15].menit!;
+      for (int i = 0; i < schedules.length; i++) {
+        int jadwalJam = schedule[i].jam!;
+        int jadwalMenit = schedule[i].menit!;
 
-      if (currentMinutes < firstScheduleMinutes) {
-        nextBel =
-            "${_formathm(schedule[0].jam!)}:${_formathm(schedule[0].menit!)}";
-        break;
-      } else {
-        if (currentMinutes >= lastScheduleMinutes) {
-          nextBel = "---";
+        int scheduleMinutes = jadwalJam * 60 + jadwalMenit;
+        int firstScheduleMinutes = (schedule[0].jam! * 60) + schedule[0].menit!;
+        int lastScheduleMinutes = (schedule[15].jam! * 60) +
+            schedule[15].menit!;
+
+        if (currentMinutes < firstScheduleMinutes) {
+          nextBel =
+          "${_formathm(schedule[0].jam!)}:${_formathm(schedule[0].menit!)}";
+          break;
         } else {
-          if (currentMinutes >= scheduleMinutes) {
-            nextBel =
-                "${_formathm(schedule[i + 1].jam!)}:${_formathm(schedule[i + 1].menit!)}";
+          if (currentMinutes >= lastScheduleMinutes) {
+            nextBel = "---";
+          } else {
+            if (currentMinutes >= scheduleMinutes) {
+              nextBel =
+              "${_formathm(schedule[i + 1].jam!)}:${_formathm(
+                  schedule[i + 1].menit!)}";
+            }
           }
         }
       }
+    } else if (currentTime.weekday == 6 || currentTime.weekday == 7) {
+      nextBel = 'Hari Senin';
     }
 
     return Text(
