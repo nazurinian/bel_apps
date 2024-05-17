@@ -324,7 +324,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                   index, selectedTime, null, schedule);
                             },
                           );
-                        },//
+                        },
                       );
                     },
                     child: Card(
