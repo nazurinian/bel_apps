@@ -63,6 +63,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
 
   /// TAMBAHIN PENGECEKAN UPDATENYA YA, KALO NONAKTIF YA NONAKTIF< KALO AKTIF YA AKTIF NOTIF BERHASILNYA
   void updateStatusPutarManual(bool newValue, int resetChoice) {
+    //Proses gabunging skrg
     putar
         .set(newValue)
         .then((value) => ToastUtil.showToast("Data berhasil diupdate", ToastStatus.success))
