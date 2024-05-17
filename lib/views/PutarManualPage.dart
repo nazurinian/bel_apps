@@ -1,7 +1,6 @@
 import 'package:bel_sekolah/utils/Helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class PutarManualPage extends StatefulWidget {
   const PutarManualPage({super.key});
@@ -18,11 +17,9 @@ class _PutarManualPageState extends State<PutarManualPage> {
 
   bool _switchValue = false;
   bool _isLoading = true;
-
   int _counter = 0;
 
-  // bool _isSwitchOn = false;
-  TextEditingController _controller = TextEditingController(text: '0');
+  final TextEditingController _controller = TextEditingController(text: '0');
   final int _minValue = 0;
   final int _maxValue = 6;
 
@@ -46,7 +43,6 @@ class _PutarManualPageState extends State<PutarManualPage> {
         });
       }
     }, onError: (error) {
-      // Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
       ToastUtil.showToast(error, ToastStatus.error);
     });
 
@@ -61,24 +57,21 @@ class _PutarManualPageState extends State<PutarManualPage> {
         });
       }
     }, onError: (error) {
-      // Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
       ToastUtil.showToast(error, ToastStatus.error);
     });
   }
 
+  /// TAMBAHIN PENGECEKAN UPDATENYA YA, KALO NONAKTIF YA NONAKTIF< KALO AKTIF YA AKTIF NOTIF BERHASILNYA
   void updateStatusPutarManual(bool newValue, int resetChoice) {
     putar
         .set(newValue)
         .then((value) => ToastUtil.showToast("Data berhasil diupdate", ToastStatus.success))
-        // .then((value) => print("Data berhasil diupdate"))
+        // .then((value) => SnackbarUtil.showSnackbar(context: context, message: "Data berhasil diupdate"))
         .catchError((error) => ToastUtil.showToast("Gagal mengupdate data: \n$error", ToastStatus.error));
-        // .catchError((error) => print("Gagal mengupdate data: \n$error"));
     choice
         .set(resetChoice)
         .then((value) => ToastUtil.showToast("Data berhasil diupdate", ToastStatus.success))
-        // .then((value) => print("Data berhasil diupdate"))
         .catchError((error) => ToastUtil.showToast("Gagal mengupdate data: \n$error", ToastStatus.error));
-        // .catchError((error) => print("Gagal mengupdate data: \n$error"));
   }
 
   void _incrementCounter() {
@@ -110,38 +103,34 @@ class _PutarManualPageState extends State<PutarManualPage> {
       setState(
         () {
           if (value) {
-            String msg = "Ingin memutar langsung bel saat ini?";
+            Text content =
+            const Text("Ingin memutar langsung bel saat ini?");
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
-                content: msg,
+                content: content,
                 onConfirm: () {
                   setState(() {
                     _switchValue = value; // Mengubah nilai switch
                   });
-                  // startPlay();
+                  // startPlay;
                   updateStatusPutarManual(value, _counter);
-                  // print("on value : $value");
-                  // print("on counter : $_counter");
-                  // Navigator.of(context).pop();
                 });
           } else {
-            String msg =
-                "Bel sedang diputar saat ini, ingin menghentikan pemutaran?";
+            Text content =
+                const Text("Bel sedang diputar saat ini, ingin menghentikan pemutaran?");
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
-                content: msg,
+                content: content,
                 onConfirm: () {
                   setState(() {
                     _counter = 0;
                     _controller.text = '0';
                     _switchValue = value; // Mengubah nilai switch
                   });
-                  // stopPlay();
+                  // stopPlay;
                   updateStatusPutarManual(value, _counter);
-                  // print("off value : $value");
-                  // print("off counter : $_counter");
                 });
           }
         },

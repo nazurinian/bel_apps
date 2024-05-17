@@ -58,16 +58,17 @@ class _ChatPage extends State<ChatPage> {
         // If we except the disconnection, `onDone` should be fired as result.
         // If we didn't except this (no flag set), it means closing by remote.
         if (isDisconnecting) {
-          Fluttertoast.showToast(msg: 'Disconnecting locally!', toastLength: Toast.LENGTH_SHORT);
+          Fluttertoast.showToast(
+              msg: 'Disconnecting locally!', toastLength: Toast.LENGTH_SHORT);
         } else {
-          Fluttertoast.showToast(msg: 'Disconnected remotely!', toastLength: Toast.LENGTH_SHORT);
+          Fluttertoast.showToast(
+              msg: 'Disconnected remotely!', toastLength: Toast.LENGTH_SHORT);
         }
         if (this.mounted) {
           setState(() {});
         }
       });
     }).catchError((error) {
-      // Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
       ToastUtil.showToast(error, ToastStatus.error);
     });
   }
@@ -138,7 +139,8 @@ class _ChatPage extends State<ChatPage> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: ColorsTheme.lightBackground,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide(
@@ -154,8 +156,8 @@ class _ChatPage extends State<ChatPage> {
                         hintText: isConnecting
                             ? 'Wait until connected...'
                             : isConnected
-                            ? 'Type your message...'
-                            : 'Chat got disconnected',
+                                ? 'Type your message...'
+                                : 'Chat got disconnected',
                         hintStyle: const TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
@@ -250,7 +252,6 @@ class _ChatPage extends State<ChatPage> {
               curve: Curves.easeOut);
         });
       } catch (e) {
-        // Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
         ToastUtil.showToast(e.toString(), ToastStatus.error);
         // Ignore error, but notify state
         setState(() {});

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:bel_sekolah/themes/colors/Colors.dart';
 import 'package:bel_sekolah/models/ScheduleModel.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../models/TimeNowModel.dart';
 
 class NextSchedule extends StatefulWidget {
@@ -61,9 +60,7 @@ class _NextScheduleState extends State<NextSchedule> {
           }
         });
       }
-
     }, onError: (error) {
-      // Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
       ToastUtil.showToast(error, ToastStatus.error);
     });
   }
@@ -83,8 +80,7 @@ class _NextScheduleState extends State<NextSchedule> {
     });
   }
 
-  Widget getScheduleTitle(
-      CustomTime currentTime, List<Schedule> schedule) {
+  Widget getScheduleTitle(CustomTime currentTime, List<Schedule> schedule) {
     String belNow = "";
     int currentMinutes = currentTime.hours * 60 + currentTime.minutes;
 
@@ -131,14 +127,16 @@ class _NextScheduleState extends State<NextSchedule> {
       int lastScheduleMinutes = (schedule[15].jam! * 60) + schedule[15].menit!;
 
       if (currentMinutes < firstScheduleMinutes) {
-        nextBel = "${_formathm(schedule[0].jam!)}:${_formathm(schedule[0].menit!)}";
+        nextBel =
+            "${_formathm(schedule[0].jam!)}:${_formathm(schedule[0].menit!)}";
         break;
       } else {
         if (currentMinutes >= lastScheduleMinutes) {
           nextBel = "---";
         } else {
           if (currentMinutes >= scheduleMinutes) {
-            nextBel = "${_formathm(schedule[i+1].jam!)}:${_formathm(schedule[i+1].menit!)}";
+            nextBel =
+                "${_formathm(schedule[i + 1].jam!)}:${_formathm(schedule[i + 1].menit!)}";
           }
         }
       }

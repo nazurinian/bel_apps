@@ -79,10 +79,14 @@ class _MainPageState extends State<MainPage> {
                       child: AnimatedContainer(
                         height: isBluetoothPressed
                             ? 250
-                            : (isJadwalPressed || isBelManualPressed ? 50 : 100),
+                            : (isJadwalPressed || isBelManualPressed
+                                ? 50
+                                : 100),
                         width: isBluetoothPressed
                             ? 170
-                            : (isJadwalPressed || isBelManualPressed ? 120 : 150),
+                            : (isJadwalPressed || isBelManualPressed
+                                ? 120
+                                : 150),
                         duration: const Duration(milliseconds: 300),
                         child: OutlinedButton(
                           style: ButtonStyle(
@@ -96,11 +100,9 @@ class _MainPageState extends State<MainPage> {
                                 MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                                 if (states.contains(MaterialState.pressed)) {
-                                  return Colors.redAccent.withOpacity(
-                                      0.2);
+                                  return Colors.redAccent.withOpacity(0.2);
                                 }
-                                return Colors
-                                    .white;
+                                return Colors.white;
                               },
                             ),
                           ),
@@ -142,10 +144,14 @@ class _MainPageState extends State<MainPage> {
                       child: AnimatedContainer(
                         height: isJadwalPressed
                             ? 250
-                            : (isBluetoothPressed || isBelManualPressed ? 50 : 100),
+                            : (isBluetoothPressed || isBelManualPressed
+                                ? 50
+                                : 100),
                         width: isJadwalPressed
                             ? 170
-                            : (isBluetoothPressed || isBelManualPressed ? 120 : 150),
+                            : (isBluetoothPressed || isBelManualPressed
+                                ? 120
+                                : 150),
                         duration: const Duration(milliseconds: 300),
                         child: OutlinedButton(
                           style: ButtonStyle(
@@ -159,11 +165,9 @@ class _MainPageState extends State<MainPage> {
                                 MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                                 if (states.contains(MaterialState.pressed)) {
-                                  return Colors.green.withOpacity(
-                                      0.2);
+                                  return Colors.green.withOpacity(0.2);
                                 }
-                                return Colors
-                                    .white;
+                                return Colors.white;
                               },
                             ),
                           ),
@@ -214,21 +218,17 @@ class _MainPageState extends State<MainPage> {
                     duration: const Duration(milliseconds: 300),
                     child: OutlinedButton(
                       style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            )),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
                         side: MaterialStateProperty.all(
                             const BorderSide(color: Colors.blueAccent)),
-                        overlayColor:
-                        MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
+                        overlayColor: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed)) {
-                              return Colors.blueAccent.withOpacity(
-                                  0.2);
+                              return Colors.blueAccent.withOpacity(0.2);
                             }
-                            return Colors
-                                .white;
+                            return Colors.white;
                           },
                         ),
                       ),

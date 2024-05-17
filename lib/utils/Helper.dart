@@ -22,7 +22,6 @@ class ToastUtil {
       timeInSecForIosWeb: 1,
       backgroundColor: backgroundColor,
       textColor: Colors.white,
-      // fontSize: 16.0,
     );
   }
 }
@@ -31,7 +30,7 @@ class DialogUtil {
   static void showConfirmationDialog({
     required BuildContext context,
     required String title,
-    required String content,
+    required Widget content,
     required VoidCallback onConfirm,
   }) {
     showDialog(
@@ -39,7 +38,7 @@ class DialogUtil {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Text(content),
+          content: content,
           actions: [
             TextButton(
               onPressed: () {
@@ -57,6 +56,21 @@ class DialogUtil {
           ],
         );
       },
+    );
+  }
+}
+
+class SnackbarUtil {
+  static void showSnackbar({
+    required BuildContext context,
+    required String message,
+    // Color backgroundColor = Colors.black87,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        // backgroundColor: backgroundColor,
+      ),
     );
   }
 }
