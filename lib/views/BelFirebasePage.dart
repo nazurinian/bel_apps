@@ -325,7 +325,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                             },
                           );
                         },
-                      );//
+                      );
                     },
                     child: Card(
                       margin: const EdgeInsets.all(4),
