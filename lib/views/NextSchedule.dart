@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bel_sekolah/utils/DisplaySize.dart';
+import 'package:bel_sekolah/utils/Helper.dart';
 import 'package:flutter/material.dart';
 import 'package:bel_sekolah/themes/colors/Colors.dart';
 import 'package:bel_sekolah/models/ScheduleModel.dart';
@@ -62,7 +63,8 @@ class _NextScheduleState extends State<NextSchedule> {
       }
 
     }, onError: (error) {
-      Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
+      // Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
+      ToastUtil.showToast(error, ToastStatus.error);
     });
   }
 

@@ -1,4 +1,5 @@
 import 'package:bel_sekolah/models/ScheduleModel.dart';
+import 'package:bel_sekolah/utils/Helper.dart';
 import 'package:bel_sekolah/utils/NetworkConnectivity.dart';
 import 'package:bel_sekolah/utils/DisplaySize.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -253,24 +254,25 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
       ));
     }).catchError(
       (error) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              scrollable: true,
-              title: const Text('Error'),
-              content: Text('Terjadi kesalahan saat memperbarui bel: $error'),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
+        ToastUtil.showToast("Terjadi kesalahan saat memperbarui bel: \n$error'", ToastStatus.error);
+        // showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       scrollable: true,
+        //       title: const Text('Error'),
+        //       content: Text('Terjadi kesalahan saat memperbarui bel: $error'),
+        //       actions: [
+        //         ElevatedButton(
+        //           onPressed: () {
+        //             Navigator.of(context).pop();
+        //           },
+        //           child: const Text('OK'),
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
       },
     );
   }

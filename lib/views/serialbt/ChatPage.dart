@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:bel_sekolah/utils/Helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -66,7 +67,8 @@ class _ChatPage extends State<ChatPage> {
         }
       });
     }).catchError((error) {
-      Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
+      // Fluttertoast.showToast(msg: error, toastLength: Toast.LENGTH_SHORT);
+      ToastUtil.showToast(error, ToastStatus.error);
     });
   }
 
@@ -248,7 +250,8 @@ class _ChatPage extends State<ChatPage> {
               curve: Curves.easeOut);
         });
       } catch (e) {
-        Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
+        // Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_SHORT);
+        ToastUtil.showToast(e.toString(), ToastStatus.error);
         // Ignore error, but notify state
         setState(() {});
       }
