@@ -1,3 +1,4 @@
+import 'package:bel_sekolah/models/PutarManualModel.dart';
 import 'package:bel_sekolah/utils/Helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,8 @@ class PutarManualPage extends StatefulWidget {
 }
 
 class _PutarManualPageState extends State<PutarManualPage> {
-  DatabaseReference putar =
-      FirebaseDatabase.instance.ref('putar-manual/').child('putar');
-  DatabaseReference choice =
-      FirebaseDatabase.instance.ref('putar-manual/').child('choice');
+  DatabaseReference ref =
+      FirebaseDatabase.instance.ref('putar-manual/');
 
   bool _switchValue = false;
   bool _isLoading = true;
@@ -24,36 +23,28 @@ class _PutarManualPageState extends State<PutarManualPage> {
   final int _maxValue = 6;
 
   final List<String> pilihan = [
-    "Amelia",
-    "Bernadette",
-    "Caroline",
-    "Dorothy",
-    "Emily",
-    "Felicity"
+    "Bel literasi pagi",
+    "Bel awal masuk jam kelas",
+    "Bel diantara jam-jam kelas",
+    "Bel istirahat",
+    "Bel pulang",
+    "Bel 5 menit sebelum masuk"
   ];
 
-  void getDataRealtime() async {
-    Stream<DatabaseEvent> streamPutar = putar.onValue;
-    streamPutar.listen((event) {
-      if (event.snapshot.value != null) {
-        // print(event.snapshot.value);
-        setState(() {
-          _isLoading = false;
-          _switchValue = event.snapshot.value as bool;
-        });
-      }
-    }, onError: (error) {
-      ToastUtil.showToast(error, ToastStatus.error);
-    });
 
-    Stream<DatabaseEvent> streamChoice = choice.onValue;
-    streamChoice.listen((event) {
+  PutarManual? putarManual;
+
+  void getDataRealtime() async {
+    Stream<DatabaseEvent> stream = ref.onValue;
+    stream.listen((event) {
       if (event.snapshot.value != null) {
-        // print(event.snapshot.value);
         setState(() {
-          int val = event.snapshot.value as int;
-          _counter = val;
-          _controller.text = '$val';
+          putarManual = PutarManual.fromJson(event.snapshot.value as Map);
+
+          _isLoading = false;
+          _switchValue = putarManual!.putar;
+          _counter = putarManual!.choice;
+          _controller.text = '${putarManual!.choice}';
         });
       }
     }, onError: (error) {
@@ -61,18 +52,37 @@ class _PutarManualPageState extends State<PutarManualPage> {
     });
   }
 
-  /// TAMBAHIN PENGECEKAN UPDATENYA YA, KALO NONAKTIF YA NONAKTIF< KALO AKTIF YA AKTIF NOTIF BERHASILNYA
-  void updateStatusPutarManual(bool newValue, int resetChoice) {
-    //Proses gabunging skrg
-    putar
-        .set(newValue)
-        .then((value) => ToastUtil.showToast("Data berhasil diupdate", ToastStatus.success))
-        // .then((value) => SnackbarUtil.showSnackbar(context: context, message: "Data berhasil diupdate"))
-        .catchError((error) => ToastUtil.showToast("Gagal mengupdate data: \n$error", ToastStatus.error));
-    choice
-        .set(resetChoice)
-        .then((value) => ToastUtil.showToast("Data berhasil diupdate", ToastStatus.success))
-        .catchError((error) => ToastUtil.showToast("Gagal mengupdate data: \n$error", ToastStatus.error));
+  /// TIME OUT UNTUK NGEFALSE IN PUTAR MANUAL, ATUR 5 menit
+  // void checkAndResetPutar() async {
+  //   await Future.delayed(const Duration(minutes: 5));
+  //   bool putar = true;
+  //   Stream<DatabaseEvent> stream = ref.child('putar').onValue;
+  //   stream.listen((event) {
+  //     if (event.snapshot.value != null) {
+  //       setState(() {
+  //         putar = event.snapshot.value as bool;
+  //         print("pemutaran saat ini : $putar");
+  //       });
+  //     }
+  //   });
+  //
+  //   if (putar == true) {
+  //     print('putar has been reset to false');
+  //   } else {
+  //     print('putar is already false');
+  //   }
+  // }
+
+  void updateStatusPutarManual(PutarManual manual) {
+    Map<String, dynamic> ptrManual = manual.toJson();
+
+    String update = _switchValue ? "mengaktifkan" : "menonaktifkan";
+    String errorUpdate = _switchValue ? "mengaktifkan" : "menonaktifkan";
+
+    ref
+        .update(ptrManual)
+        .then((value) => ToastUtil.showToast("Berhasil $update bel manual" , ToastStatus.success))
+        .catchError((error) => ToastUtil.showToast("Gagal $errorUpdate bel manual\ndata: $error", ToastStatus.error));
   }
 
   void _incrementCounter() {
@@ -97,6 +107,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
   void initState() {
     super.initState();
     getDataRealtime();
+    // checkAndResetPutar();
   }
 
   void _onSwitchChanged(bool value) {
@@ -114,8 +125,10 @@ class _PutarManualPageState extends State<PutarManualPage> {
                   setState(() {
                     _switchValue = value; // Mengubah nilai switch
                   });
+                  PutarManual manual;
+                  manual = PutarManual(putar: value, choice: _counter);
                   // startPlay;
-                  updateStatusPutarManual(value, _counter);
+                  updateStatusPutarManual(manual);
                 });
           } else {
             Text content =
@@ -130,8 +143,10 @@ class _PutarManualPageState extends State<PutarManualPage> {
                     _controller.text = '0';
                     _switchValue = value; // Mengubah nilai switch
                   });
+                  PutarManual manual;
+                  manual = PutarManual(putar: value, choice: _counter);
                   // stopPlay;
-                  updateStatusPutarManual(value, _counter);
+                  updateStatusPutarManual(manual);
                 });
           }
         },
