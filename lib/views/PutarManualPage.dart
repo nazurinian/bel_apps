@@ -28,9 +28,9 @@ class _PutarManualPageState extends State<PutarManualPage> {
     "Bel literasi pagi",
     "Bel awal masuk jam kelas",
     "Bel diantara jam-jam kelas",
+    "Bel 5 menit sebelum masuk"
     "Bel istirahat",
     "Bel pulang",
-    "Bel 5 menit sebelum masuk"
   ];
 
 
