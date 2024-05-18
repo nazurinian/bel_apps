@@ -3,6 +3,8 @@ import 'package:bel_sekolah/utils/Helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/NetworkConnectivity.dart';
+
 class PutarManualPage extends StatefulWidget {
   const PutarManualPage({super.key});
 
@@ -169,186 +171,205 @@ class _PutarManualPageState extends State<PutarManualPage> {
       appBar: AppBar(
         title: const Text("Putar Manual Bel"),
       ),
-      body: Container(
-        margin: const EdgeInsets.all(8),
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Card(
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding:
-                                EdgeInsets.only(left: 8, right: 8, top: 16),
-                            child: Text(
-                              "Pilih Pilihan Putar",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 22,
+      body: ConnectionChecker(
+        connectedWidget: Container(
+          margin: const EdgeInsets.all(16),
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Card(
+                        child: Column(
+                          children: [
+                            const Padding(
+                              padding:
+                                  EdgeInsets.only(left: 8, right: 8, top: 16),
+                              child: Text(
+                                "Pilih Pilihan Putar",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 22,
+                                ),
                               ),
                             ),
-                          ),
-                          const Divider(
-                            thickness: 3,
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: pilihan.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                dense: true,
-                                visualDensity:
-                                    const VisualDensity(vertical: -4),
-                                // to compact
-                                title: Text(
-                                  pilihan[index],
-                                  style: TextStyle(
-                                    color: _counter == (index + 1)
-                                        ? Colors.green
-                                        : Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                leading: Text(
-                                  "${index + 1}",
-                                  style: TextStyle(
-                                    color: _counter == (index + 1)
-                                        ? Colors.green
-                                        : Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                // onTap: () => _onTitleTap(index + 1),
-                                onTap: () {},
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children:
-                                List.generate((pilihan.length + 1), (index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: GestureDetector(
-                                  onTap: () =>
-                                      _switchValue ? null : _onTitleTap(index),
-                                  child: SizedBox(
-                                    width: 30,
-                                    child: Card(
-                                      color: _counter == index
+                            const Divider(
+                              thickness: 3,
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: pilihan.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  dense: true,
+                                  visualDensity:
+                                      const VisualDensity(vertical: -4),
+                                  // to compact
+                                  title: Text(
+                                    pilihan[index],
+                                    style: TextStyle(
+                                      color: _counter == (index + 1)
                                           ? Colors.green
-                                          : Colors.white24,
-                                      child: Text(
-                                        '$index',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontSize: 18,
+                                          : Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  leading: Text(
+                                    "${index + 1}",
+                                    style: TextStyle(
+                                      color: _counter == (index + 1)
+                                          ? Colors.green
+                                          : Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  // onTap: () => _onTitleTap(index + 1),
+                                  onTap: () {},
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children:
+                                  List.generate((pilihan.length + 1), (index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: GestureDetector(
+                                    onTap: () =>
+                                        _switchValue ? null : _onTitleTap(index),
+                                    child: SizedBox(
+                                      width: 30,
+                                      child: Card(
+                                        color: _counter == index
+                                            ? Colors.green
+                                            : Colors.white24,
+                                        child: Text(
+                                          '$index',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton(
-                                  onPressed:
-                                      _switchValue ? null : _decrementCounter,
-                                  child: const Text(
-                                    '-',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                SizedBox(
-                                  width: 50,
-                                  child: TextField(
-                                    controller: _controller,
-                                    keyboardType: TextInputType.number,
-                                    enabled: !_switchValue,
-                                    onChanged: (text) {
-                                      int value = int.tryParse(text) ?? 0;
-                                      if (value < _minValue) {
-                                        value = _minValue;
-                                      } else if (value > _maxValue) {
-                                        value = _maxValue;
-                                      }
-                                      _counter = value;
-                                      _controller.text = _counter.toString();
-                                      setState(() {});
-                                    },
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                ElevatedButton(
-                                  onPressed:
-                                      _switchValue ? null : _incrementCounter,
-                                  child: const Text(
-                                    '+',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                ),
-                              ],
+                                );
+                              }),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      height: 16,
-                      child: const Divider(
-                        thickness: 2,
-                      ),
-                    ),
-                    Card(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8, right: 8, top: 16),
-                            child: Text(
-                              "${_switchValue ? "Nonaktifkan" : "Aktifkan"} Pemutaran Bel",
-                              style: const TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const Divider(
-                            thickness: 3,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Transform.scale(
-                              scale: 1.5,
-                              child: Switch(
-                                value: _switchValue,
-                                onChanged: _onSwitchChanged,
+                            Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed:
+                                        _switchValue ? null : _decrementCounter,
+                                    child: const Text(
+                                      '-',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  SizedBox(
+                                    width: 50,
+                                    child: TextField(
+                                      controller: _controller,
+                                      keyboardType: TextInputType.number,
+                                      enabled: !_switchValue,
+                                      onChanged: (text) {
+                                        int value = int.tryParse(text) ?? 0;
+                                        if (value < _minValue) {
+                                          value = _minValue;
+                                        } else if (value > _maxValue) {
+                                          value = _maxValue;
+                                        }
+                                        _counter = value;
+                                        _controller.text = _counter.toString();
+                                        setState(() {});
+                                      },
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  ElevatedButton(
+                                    onPressed:
+                                        _switchValue ? null : _incrementCounter,
+                                    child: const Text(
+                                      '+',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    )
-                  ],
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
+                        height: 16,
+                        child: const Divider(
+                          thickness: 2,
+                        ),
+                      ),
+                      Card(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8, right: 8, top: 16),
+                              child: Text(
+                                "${_switchValue ? "Nonaktifkan" : "Aktifkan"} Pemutaran Bel",
+                                style: const TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            const Divider(
+                              thickness: 3,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Transform.scale(
+                                scale: 1.5,
+                                child: Switch(
+                                  value: _switchValue,
+                                  onChanged: _onSwitchChanged,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
+        ),
+        disconnectedWidget: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.signal_wifi_connected_no_internet_4,
+                size: 120.0,
               ),
+              Text(
+                "'Tidak ada koneksi internet",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
