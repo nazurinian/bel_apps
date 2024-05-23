@@ -13,8 +13,7 @@ class PutarManualPage extends StatefulWidget {
 }
 
 class _PutarManualPageState extends State<PutarManualPage> {
-  DatabaseReference ref =
-      FirebaseDatabase.instance.ref('putar-manual/');
+  DatabaseReference ref = FirebaseDatabase.instance.ref('putar-manual/');
 
   bool _switchValue = false;
   bool _isLoading = true;
@@ -28,11 +27,10 @@ class _PutarManualPageState extends State<PutarManualPage> {
     "Bel literasi pagi",
     "Bel awal masuk jam kelas",
     "Bel diantara jam-jam kelas",
-    "Bel 5 menit sebelum masuk"
+    "Bel 5 menit sebelum masuk",
     "Bel istirahat",
-    "Bel pulang",
+    "Bel pulang"
   ];
-
 
   PutarManual? putarManual;
 
@@ -83,8 +81,10 @@ class _PutarManualPageState extends State<PutarManualPage> {
 
     ref
         .update(ptrManual)
-        .then((value) => ToastUtil.showToast("Berhasil $update bel manual" , ToastStatus.success))
-        .catchError((error) => ToastUtil.showToast("Gagal $errorUpdate bel manual\ndata: $error", ToastStatus.error));
+        .then((value) => ToastUtil.showToast(
+            "Berhasil $update bel manual", ToastStatus.success))
+        .catchError((error) => ToastUtil.showToast(
+            "Gagal $errorUpdate bel manual\ndata: $error", ToastStatus.error));
   }
 
   void _incrementCounter() {
@@ -117,8 +117,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
       setState(
         () {
           if (value) {
-            Text content =
-            const Text("Ingin memutar langsung bel saat ini?");
+            Text content = const Text("Ingin memutar langsung bel saat ini?");
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
@@ -133,8 +132,8 @@ class _PutarManualPageState extends State<PutarManualPage> {
                   updateStatusPutarManual(manual);
                 });
           } else {
-            Text content =
-                const Text("Bel sedang diputar saat ini, ingin menghentikan pemutaran?");
+            Text content = const Text(
+                "Bel sedang diputar saat ini, ingin menghentikan pemutaran?");
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
@@ -154,7 +153,9 @@ class _PutarManualPageState extends State<PutarManualPage> {
         },
       );
     } else {
-      ToastUtil.showToast("Setidaknya angka harus 1,\ntidak boleh 0 atau kosong", ToastStatus.error);
+      ToastUtil.showToast(
+          "Setidaknya angka harus 1,\ntidak boleh 0 atau kosong",
+          ToastStatus.error);
     }
   }
 
@@ -238,11 +239,12 @@ class _PutarManualPageState extends State<PutarManualPage> {
                               children:
                                   List.generate((pilihan.length + 1), (index) {
                                 return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
                                   child: GestureDetector(
-                                    onTap: () =>
-                                        _switchValue ? null : _onTitleTap(index),
+                                    onTap: () => _switchValue
+                                        ? null
+                                        : _onTitleTap(index),
                                     child: SizedBox(
                                       width: 30,
                                       child: Card(
