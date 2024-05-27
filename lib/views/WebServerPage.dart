@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bel_sekolah/utils/PermissionHandler.dart';
@@ -22,6 +23,8 @@ class _WebServerPageState extends State<WebServerPage> {
   bool _isConnectedToCorrectWifi = false;
   bool _isLoading = false;
   final String _correctUrl = 'http://10.0.0.1';
+  late Timer _timer;
+  bool _loadUrl = false;
 
   @override
   void initState() {
@@ -88,6 +91,11 @@ class _WebServerPageState extends State<WebServerPage> {
       )
       ..loadRequest(Uri.parse(_correctUrl));
     _checkConnectivity();
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (!_loadUrl) {
+        _checkConnectivity();
+      }
+    });
   }
 
   void _checkConnectivity() async {
@@ -102,7 +110,9 @@ class _WebServerPageState extends State<WebServerPage> {
         if (ssid == 'BSIB-AP' || ssid == '"BSIB-AP"' || ssid == '""BSIB-AP""') {
           setState(() {
             _isConnectedToCorrectWifi = true;
+            _loadUrl = true;
           });
+          _controller.reload();
           print('SSID True: $ssid');
           return;
         } else {
@@ -132,6 +142,7 @@ class _WebServerPageState extends State<WebServerPage> {
   @override
   void dispose() {
     _controller.clearCache();
+    _timer.cancel();
     super.dispose();
   }
 
