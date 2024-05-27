@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 import 'package:bel_sekolah/utils/PermissionHandler.dart';
 import 'package:flutter/material.dart';
@@ -356,3 +357,4 @@ class SlashPainter extends CustomPainter {
     return false;
   }
 }
+*/

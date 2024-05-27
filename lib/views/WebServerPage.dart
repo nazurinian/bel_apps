@@ -214,7 +214,6 @@ class _WebServerPageState extends State<WebServerPage> {
         canPop: false,
         onPopInvoked: (didPop) async {
           if (didPop) {
-            Navigator.pop(context);
             return;
           } else {
             final bool? shouldPop = await _goBack(context);
@@ -249,8 +248,6 @@ class _WebServerPageState extends State<WebServerPage> {
                     ],
                   ),
                 )
-              // : _success
-              //     ? const Center(child: CircularProgressIndicator())
               : _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : WebViewWidget(
