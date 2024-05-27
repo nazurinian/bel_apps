@@ -180,7 +180,7 @@ class _WebServerPageState extends State<WebServerPage> {
 
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white.withOpacity(0), // Atur opasitas di sini
+          backgroundColor: Colors.white.withOpacity(0),
         ),
         body: Center(
           child: Container(
