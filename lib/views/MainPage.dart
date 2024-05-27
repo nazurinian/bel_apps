@@ -91,16 +91,16 @@ class _MainPageState extends State<MainPage> {
                         duration: const Duration(milliseconds: 300),
                         child: OutlinedButton(
                           style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
+                            shape: WidgetStateProperty.all(
                                 RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             )),
-                            side: MaterialStateProperty.all(
+                            side: WidgetStateProperty.all(
                                 const BorderSide(color: Colors.redAccent)),
                             overlayColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) {
+                                WidgetStateProperty.resolveWith<Color>(
+                              (Set<WidgetState> states) {
+                                if (states.contains(WidgetState.pressed)) {
                                   return Colors.redAccent.withOpacity(0.2);
                                 }
                                 return Colors.white;
@@ -156,16 +156,16 @@ class _MainPageState extends State<MainPage> {
                         duration: const Duration(milliseconds: 300),
                         child: OutlinedButton(
                           style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
+                            shape: WidgetStateProperty.all(
                                 RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             )),
-                            side: MaterialStateProperty.all(
+                            side: WidgetStateProperty.all(
                                 const BorderSide(color: Colors.green)),
                             overlayColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) {
+                                WidgetStateProperty.resolveWith<Color>(
+                              (Set<WidgetState> states) {
+                                if (states.contains(WidgetState.pressed)) {
                                   return Colors.green.withOpacity(0.2);
                                 }
                                 return Colors.white;
@@ -223,14 +223,14 @@ class _MainPageState extends State<MainPage> {
                         duration: const Duration(milliseconds: 300),
                         child: OutlinedButton(
                           style: ButtonStyle(
-                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            shape: WidgetStateProperty.all(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             )),
-                            side: MaterialStateProperty.all(
+                            side: WidgetStateProperty.all(
                                 const BorderSide(color: Colors.blueAccent)),
-                            overlayColor: MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) {
+                            overlayColor: WidgetStateProperty.resolveWith<Color>(
+                              (Set<WidgetState> states) {
+                                if (states.contains(WidgetState.pressed)) {
                                   return Colors.blueAccent.withOpacity(0.2);
                                 }
                                 return Colors.white;

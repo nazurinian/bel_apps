@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:bel_sekolah/utils/PermissionHandler.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
@@ -105,7 +107,7 @@ class _WebServerPageState extends State<WebServerPage> {
           return;
         } else {
           setState(() {
-            _isConnectedToCorrectWifi = true;
+            _isConnectedToCorrectWifi = false;
           });
           print('SSID False: $ssid');
           print('Device is not connected to Wi-Fi');
@@ -141,19 +143,19 @@ class _WebServerPageState extends State<WebServerPage> {
       final shouldExit = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Keluar dari mode AP\nBel Sekolah?'),
+          title: const Text('Keluar dari mode AP\nBel Sekolah?'),
           actions: [
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context, false);
               },
-              child: Text('No'),
+              child: const Text('No'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },
-              child: Text('Yes'),
+              child: const Text('Yes'),
             ),
           ],
         ),
@@ -162,100 +164,100 @@ class _WebServerPageState extends State<WebServerPage> {
     }
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return PopScope(
-  //       canPop: false,
-  //       // onPopInvoked: () => _goBack(context),
-  //       onPopInvoked: (didPop) async {
-  //         if (didPop) {
-  //           return;
-  //         } else {
-  //           final bool shouldPop = await _goBack(context) ?? false;
-  //           if (context.mounted && shouldPop) {
-  //             Navigator.pop(context);
-  //           }
-  //         }
-  //       },
-
-  // Future<bool?> _goBack(BuildContext context) {
-  //     if (await _controller.canGoBack()) {
-  //   _controller.goBack();
-  //   return Future.value(false);
-  //   } else {
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: Text('Keluar dari mode AP\nBel Sekolah?'),
-  //       actions: [
-  //         ElevatedButton(
-  //           onPressed: () {
-  //             Navigator.pop(context, false);
-  //             // Navigator.pop(context, false);
-  //           },
-  //           child: Text('No'),
-  //         ),
-  //         ElevatedButton(
-  //           onPressed: () {
-  //             Navigator.pop(context, false);
-  //             // Navigator.pop(context, true);
-  //           },
-  //           child: Text('Yes'),
-  //         ),
-  //       ],
-  //     ) :
-  //   );
-  // }
-  //   }
-
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) async {
-        if (didPop) {
-          Navigator.pop(context);
-          return;
-        } else {
-          final bool? shouldPop = await _goBack(context);
-          if (shouldPop == true) {
-            if (context.mounted) {
-              Navigator.pop(context);
+    return PermissionHandlerWidget(notPermittedBuilder: () async {
+      String message = "";
+      IconData? icon;
+
+      PermissionStatus locationPermissionData =
+          await Permission.location.status;
+
+      if (locationPermissionData.isDenied || locationPermissionData.isPermanentlyDenied) {
+        icon = Icons.location_disabled;
+        message = "Izin lokasi belum diberikan";
+      }
+
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white.withOpacity(0), // Atur opasitas di sini
+        ),
+        body: Center(
+          child: Container(
+            height: 350,
+            width: 250,
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: 120.0,
+                ),
+                Text(
+                  message,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }, permittedBuilder: () {
+      return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          if (didPop) {
+            Navigator.pop(context);
+            return;
+          } else {
+            final bool? shouldPop = await _goBack(context);
+            if (shouldPop == true) {
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
             }
           }
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Mode AP Bel Sekolah'),
-        ),
-        body: !_isConnectedToCorrectWifi
-            ? Container(
-                padding: const EdgeInsets.all(24),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.wifi_off,
-                      color: Colors.red,
-                      size: 100,
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Hubungkan dengan WiFi Access Point Bel Sekolah',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              )
-            // : _success
-            //     ? const Center(child: CircularProgressIndicator())
-            : _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : WebViewWidget(
-                    controller: _controller,
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Mode AP Bel Sekolah'),
+          ),
+          body: !_isConnectedToCorrectWifi
+              ? Container(
+                  padding: const EdgeInsets.all(24),
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.wifi_off,
+                        color: Colors.red,
+                        size: 100,
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Hubungkan dengan WiFi Access Point Bel Sekolah',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-      ),
-    );
+                )
+              // : _success
+              //     ? const Center(child: CircularProgressIndicator())
+              : _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : WebViewWidget(
+                      controller: _controller,
+                    ),
+        ),
+      );
+    });
   }
 }

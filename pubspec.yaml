@@ -48,6 +48,7 @@ dependencies:
   webview_flutter: ^4.7.0
   network_info_plus: ^5.0.3
   device_info_plus: ^10.1.0
+  dart_ping: ^9.0.1
 
 dev_dependencies:
   flutter_test:

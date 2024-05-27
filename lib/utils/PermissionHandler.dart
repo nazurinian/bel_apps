@@ -18,7 +18,7 @@ class PermissionHandlerWidget extends StatefulWidget {
 
 class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
   bool locationGranted = false;
-  bool bluetoothGranted = false;
+  // bool bluetoothGranted = false;
   bool permissionsRequested = false;
 
   @override
@@ -29,10 +29,10 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
 
   Future<void> requestPermission() async {
     Map<Permission, PermissionStatus> statuses = await [
-      Permission.bluetooth,
-      Permission.bluetoothScan,
-      Permission.bluetoothConnect,
-      Permission.bluetoothAdvertise,
+      // Permission.bluetooth,
+      // Permission.bluetoothScan,
+      // Permission.bluetoothConnect,
+      // Permission.bluetoothAdvertise,
       Permission.location,
     ].request();
 
@@ -46,14 +46,14 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
             openAppSettings();
           }
         }
-        if (permission == Permission.bluetoothScan) {
-          if (status.isGranted) {
-            bluetoothGranted = true;
-          }
-          if (status.isPermanentlyDenied) {
-            openAppSettings();
-          }
-        }
+        // if (permission == Permission.bluetoothScan) {
+        //   if (status.isGranted) {
+        //     bluetoothGranted = true;
+        //   }
+        //   if (status.isPermanentlyDenied) {
+        //     openAppSettings();
+        //   }
+        // }
       },
     );
 
@@ -70,7 +70,8 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
               CircularProgressIndicator());
     }
 
-    return (locationGranted && bluetoothGranted)
+    // return (locationGranted && bluetoothGranted)
+    return (locationGranted)
         ? widget.permittedBuilder()
         : FutureBuilder<Widget>(
             future: widget.notPermittedBuilder(),

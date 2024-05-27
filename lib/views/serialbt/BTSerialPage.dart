@@ -95,8 +95,9 @@ class _BTSerialPage extends State<BTSerialPage> {
           PermissionStatus bluetoothPermissionData =
               await Permission.bluetoothScan.status;
 
-          if (bluetoothPermissionData.isDenied &&
-              locationPermissionData.isDenied) {
+          // Sekali tolak, sama tolak selamanya (2x tolak)
+          if ((bluetoothPermissionData.isDenied || bluetoothPermissionData.isPermanentlyDenied) &&
+              (locationPermissionData.isDenied || locationPermissionData.isPermanentlyDenied)) {
             // icon = Icons.camera;
             message = "Izin lokasi dan bluetooth \nbelum diberikan";
             return Center(
@@ -159,11 +160,11 @@ class _BTSerialPage extends State<BTSerialPage> {
               ),
             );
           } else {
-            if (bluetoothPermissionData.isDenied) {
+            if (bluetoothPermissionData.isDenied || bluetoothPermissionData.isPermanentlyDenied) {
               icon = Icons.bluetooth_disabled;
               message = "Izin bluetooth belum diberikan";
             }
-            if (locationPermissionData.isDenied) {
+            if (locationPermissionData.isDenied || locationPermissionData.isPermanentlyDenied) {
               icon = Icons.location_disabled;
               message = "Izin lokasi belum diberikan";
             }

@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:bel_sekolah/views/SplashScreen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'NoInternetApp.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -13,7 +15,13 @@ void main() async {
     await initializeDateFormatting('id_ID', null)
         .then((_) => runApp(const MyApp()));
   } else {
-    await FirebaseAuth.instance.signInAnonymously();
+    try {
+      await FirebaseAuth.instance.signInAnonymously().timeout(const Duration(seconds: 10));
+      await initializeDateFormatting('id_ID', null).then((_) => runApp(const MyApp()));
+    } catch (e) {
+      print('Error signing in anonymously: $e');
+      runApp(const NoInternetApp(errorMessage: 'Koneksi dengan server gagal.\nSilakan coba lagi.'));
+    }
   }
 }
 
