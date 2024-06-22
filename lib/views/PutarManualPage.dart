@@ -248,7 +248,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                     // onTap: () {},
                                     onTap: () => _switchValue
                                         ? null
-                                        : _onTitleTap(index + 1), //
+                                        : _onTitleTap(index + 1),
                                   ),
                                 );
                               },
