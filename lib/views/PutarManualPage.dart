@@ -1,4 +1,5 @@
 import 'package:bel_sekolah/models/PutarManualModel.dart';
+import 'package:bel_sekolah/themes/colors/Colors.dart';
 import 'package:bel_sekolah/utils/Helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -21,15 +22,16 @@ class _PutarManualPageState extends State<PutarManualPage> {
 
   final TextEditingController _controller = TextEditingController(text: '0');
   final int _minValue = 0;
-  final int _maxValue = 6;
+  final int _maxValue = 7;
 
   final List<String> pilihan = [
-    "Bel literasi pagi",
-    "Bel awal masuk jam kelas",
-    "Bel diantara jam-jam kelas",
-    "Bel 5 menit sebelum masuk",
-    "Bel istirahat",
-    "Bel pulang"
+    "Bel Literasi Pagi",
+    "Bel Awal Masuk Jam Kelas",
+    "Bel Pergantian Jam Kelas",
+    "Audio 5 Menit Sebelum Bel",
+    "Bel Istirahat",
+    "Bel Pulang",
+    "Alarm Keadaan Darurat"
   ];
 
   PutarManual? putarManual;
@@ -53,6 +55,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
   }
 
   /// TIME OUT UNTUK NGEFALSE IN PUTAR MANUAL, ATUR 5 menit
+  /// (DiGANTI LANGSUNG DARI ESP32 NYA)
   // void checkAndResetPutar() async {
   //   await Future.delayed(const Duration(minutes: 5));
   //   bool putar = true;
@@ -76,15 +79,15 @@ class _PutarManualPageState extends State<PutarManualPage> {
   void updateStatusPutarManual(PutarManual manual) {
     Map<String, dynamic> ptrManual = manual.toJson();
 
-    String update = _switchValue ? "mengaktifkan" : "menonaktifkan";
-    String errorUpdate = _switchValue ? "mengaktifkan" : "menonaktifkan";
+    String update = _switchValue ? "Menjalankan" : "Menghentikan";
+    String errorUpdate = _switchValue ? "Menjalankan" : "Menghentikan";
 
     ref
         .update(ptrManual)
         .then((value) => ToastUtil.showToast(
-            "Berhasil $update bel manual", ToastStatus.success))
+            "Berhasil $update Pemutaran Bel/Audio", ToastStatus.success))
         .catchError((error) => ToastUtil.showToast(
-            "Gagal $errorUpdate bel manual\ndata: $error", ToastStatus.error));
+            "Gagal $errorUpdate Pemutaran Bel/Audio\ndata: $error", ToastStatus.error));
   }
 
   void _incrementCounter() {
@@ -117,7 +120,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
       setState(
         () {
           if (value) {
-            Text content = const Text("Ingin memutar langsung bel saat ini?");
+            Text content = Text("Putar Bel/Audio sekarang?\n(${pilihan[_counter-1]})");
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
@@ -133,7 +136,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                 });
           } else {
             Text content = const Text(
-                "Bel sedang diputar saat ini, ingin menghentikan pemutaran?");
+                "Bel/Audio sedang diputar saat ini.\nHentikan pemutaran?");
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
@@ -170,7 +173,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Putar Manual Bel"),
+        title: const Text("Putar Manual Bel/Audio"),
       ),
       body: ConnectionChecker(
         connectedWidget: Container(
@@ -205,31 +208,41 @@ class _PutarManualPageState extends State<PutarManualPage> {
                               shrinkWrap: true,
                               itemCount: pilihan.length,
                               itemBuilder: (context, index) {
-                                return ListTile(
-                                  dense: true,
-                                  visualDensity:
-                                      const VisualDensity(vertical: -4),
-                                  // to compact
-                                  title: Text(
-                                    pilihan[index],
-                                    style: TextStyle(
-                                      color: _counter == (index + 1)
-                                          ? Colors.green
-                                          : Colors.black,
-                                      fontSize: 14,
-                                    ),
+                                return Card(
+                                  clipBehavior: Clip.antiAlias,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
-                                  leading: Text(
-                                    "${index + 1}",
-                                    style: TextStyle(
-                                      color: _counter == (index + 1)
-                                          ? Colors.green
-                                          : Colors.black,
-                                      fontSize: 14,
+                                  color: _counter == index + 1
+                                      ? Colors.green
+                                      : Colors.white24,
+                                  child: ListTile(
+                                    dense: true,
+                                    splashColor: ColorsTheme.lightBackground2,
+                                    visualDensity:
+                                        const VisualDensity(vertical: -4),
+                                    // to compact
+                                    title: Text(
+                                      pilihan[index],
+                                      style: TextStyle(
+                                        color: _counter == (index + 1)
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontSize: 14,
+                                      ),
                                     ),
+                                    leading: Text(
+                                      "${index + 1}",
+                                      style: TextStyle(
+                                        color: _counter == (index + 1)
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    onTap: () => _onTitleTap(index + 1),
+                                    // onTap: () {},
                                   ),
-                                  // onTap: () => _onTitleTap(index + 1),
-                                  onTap: () {},
                                 );
                               },
                             ),
@@ -329,7 +342,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                               padding: const EdgeInsets.only(
                                   left: 8, right: 8, top: 16),
                               child: Text(
-                                "${_switchValue ? "Nonaktifkan" : "Aktifkan"} Pemutaran Bel",
+                                "${_switchValue ? "Hentikan" : "Jalankan"} Pemutaran",
                                 style: const TextStyle(
                                     fontSize: 22, fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center,
