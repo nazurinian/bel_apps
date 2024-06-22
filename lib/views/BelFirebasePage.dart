@@ -43,7 +43,7 @@ class _BelFirebasePageState extends State<BelFirebasePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Jadwal Bel"),
+        title: const Text("Edit Jadwal Bel"),
         bottom: TabBar(
           controller: controller,
           tabs: const [

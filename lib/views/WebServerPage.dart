@@ -154,7 +154,7 @@ class _WebServerPageState extends State<WebServerPage> {
       final shouldExit = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Keluar dari mode AP\nBel Sekolah?'),
+          title: const Text('Keluar dari Mode AP\nBel Sekolah?'),
           actions: [
             ElevatedButton(
               onPressed: () {
@@ -252,7 +252,7 @@ class _WebServerPageState extends State<WebServerPage> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Hubungkan dengan WiFi Access Point Bel Sekolah',
+                        'Hubungkan Smartphone ke WiFi Access Point Bel Sekolah',
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.center,
                       ),
