@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bel_sekolah/themes/fonts/Fonts.dart';
 import 'package:bel_sekolah/utils/PermissionHandler.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -85,7 +86,7 @@ class _WebServerPageState extends State<WebServerPage> {
         'Toaster',
         onMessageReceived: (JavaScriptMessage message) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
+            SnackBar(content: Text(message.message, style: FontTheme.normal14Bold(color: Colors.black),)),
           );
         },
       )
@@ -154,19 +155,19 @@ class _WebServerPageState extends State<WebServerPage> {
       final shouldExit = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Keluar dari Mode AP\nBel Sekolah?'),
+          title: Text('Keluar dari Mode AP\nBel Sekolah?', style: FontTheme.normal20Bold(color: Colors.black),),
           actions: [
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context, false);
               },
-              child: const Text('No'),
+              child: Text('No', style: FontTheme.normal14Bold(color: Colors.purple),),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },
-              child: const Text('Yes'),
+              child: Text('Yes', style: FontTheme.normal14Bold(color: Colors.purple),),
             ),
           ],
         ),
@@ -212,7 +213,7 @@ class _WebServerPageState extends State<WebServerPage> {
                 ),
                 Text(
                   message,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: FontTheme.normal14Bold(color: Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -237,7 +238,8 @@ class _WebServerPageState extends State<WebServerPage> {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Mode AP Bel Sekolah'),
+            title: const Text('Mode AP Bel Sekolah',
+              style: TextStyle(fontWeight: FontWeight.bold),),
           ),
           body: !_isConnectedToCorrectWifi
               ? Container(
@@ -253,7 +255,7 @@ class _WebServerPageState extends State<WebServerPage> {
                       SizedBox(height: 20),
                       Text(
                         'Hubungkan Smartphone ke WiFi Access Point Bel Sekolah',
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ],

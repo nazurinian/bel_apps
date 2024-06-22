@@ -1,6 +1,17 @@
 part of 'Fonts.dart';
 
 class FontTheme {
+  static TextStyle normal14Bold({Color color = Colors.black}) => TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 14,
+    color: color,
+  );
+
+  static TextStyle normal20Bold({Color color = Colors.black}) => TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+    color: color,
+  );
   // static TextStyle mulishSize10({required Color color}) => TextStyle(
   //   fontFamily: 'Mulish',
   //   fontSize: 10,

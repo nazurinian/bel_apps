@@ -1,3 +1,4 @@
+import 'package:bel_sekolah/themes/fonts/Fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -37,21 +38,21 @@ class DialogUtil {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
+          title: Text(title, style: FontTheme.normal20Bold(color: Colors.black),),
           content: content,
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Tidak'),
+              child: Text('Tidak', style: FontTheme.normal14Bold(color: Colors.purple),),
             ),
             TextButton(
               onPressed: () {
                 onConfirm();
                 Navigator.of(context).pop();
               },
-              child: const Text('Ya'),
+              child: Text('Ya', style: FontTheme.normal14Bold(color: Colors.purple),),
             ),
           ],
         );
@@ -68,7 +69,7 @@ class SnackbarUtil {
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(message, style: FontTheme.normal14Bold(color: Colors.white),),
         // backgroundColor: backgroundColor,
       ),
     );
