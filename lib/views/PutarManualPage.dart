@@ -240,8 +240,11 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                         fontSize: 14,
                                       ),
                                     ),
-                                    onTap: () => _onTitleTap(index + 1),
+                                    // onTap: () => _onTitleTap(index + 1),
                                     // onTap: () {},
+                                    onTap: () => _switchValue
+                                        ? null
+                                        : _onTitleTap(index + 1),
                                   ),
                                 );
                               },
