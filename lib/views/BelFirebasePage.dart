@@ -1,4 +1,5 @@
 import 'package:bel_sekolah/models/ScheduleModel.dart';
+import 'package:bel_sekolah/themes/fonts/Fonts.dart';
 import 'package:bel_sekolah/utils/Helper.dart';
 import 'package:bel_sekolah/utils/NetworkConnectivity.dart';
 import 'package:bel_sekolah/utils/DisplaySize.dart';
@@ -43,17 +44,18 @@ class _BelFirebasePageState extends State<BelFirebasePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Jadwal Bel"),
+        title: const Text("Edit Jadwal Bel",
+            style: TextStyle(fontWeight: FontWeight.bold),),
         bottom: TabBar(
           controller: controller,
           tabs: const [
             Tab(
               icon: Icon(Icons.access_time_filled),
-              text: "Senin-Kamis",
+              child: Text("Senin-Kamis", style: TextStyle(fontWeight: FontWeight.bold),),
             ),
             Tab(
               icon: Icon(Icons.access_time),
-              text: "Jumat",
+              child: Text("Jum'at", style: TextStyle(fontWeight: FontWeight.bold),),
             ),
           ],
         ),
@@ -102,18 +104,18 @@ class _BelFirebasePageState extends State<BelFirebasePage>
             ],
           ),
         ),
-        disconnectedWidget: const Center(
+        disconnectedWidget: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.signal_wifi_connected_no_internet_4,
                 size: 120.0,
               ),
               Text(
                 "'Tidak ada koneksi internet",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: FontTheme.normal14Bold(color: Colors.black),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -296,7 +298,7 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
             margin: const EdgeInsets.all(8),
             child: Text(
               jamKe,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: FontTheme.normal14Bold(color: Colors.black),
             ),
           ),
           Container(
@@ -314,7 +316,8 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                         int.parse(menit),
                         (TimeOfDay selectedTime) {
                           Text content =
-                              Text('Jam: ${_formathm(selectedTime.hour)}:${_formathm(selectedTime.minute)}');
+                              Text('Jam: ${_formathm(selectedTime.hour)}:${_formathm(selectedTime.minute)}',
+                                style: FontTheme.normal14Bold(color: Colors.black),);
                           DialogUtil.showConfirmationDialog(
                             context: context,
                             title: 'Waktu yang Dipilih',
@@ -336,8 +339,10 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text("Jam : $jam"),
-                            Text("Menit : $menit"),
+                            Text("Jam : $jam",
+                              style: FontTheme.normal14Bold(color: Colors.black),),
+                            Text("Menit : $menit",
+                              style: FontTheme.normal14Bold(color: Colors.black),),
                           ],
                         ),
                       ),
@@ -367,7 +372,8 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                       fontSize: 14),
                                 ),
                                 RadioListTile(
-                                    title: const Text("True"),
+                                    title: Text("True",
+                                      style: FontTheme.normal14Bold(color: Colors.black),),
                                     value: 1,
                                     groupValue: selectedRadioTile,
                                     onChanged: (val) {
@@ -376,7 +382,8 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                       });
                                     }),
                                 RadioListTile(
-                                  title: const Text("False"),
+                                  title: Text("False",
+                                    style: FontTheme.normal14Bold(color: Colors.black),),
                                   value: 2,
                                   groupValue: selectedRadioTile,
                                   onChanged: (val) {
@@ -409,7 +416,8 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                         width: 100,
                         height: 50,
                         alignment: Alignment.center,
-                        child: Text("Aktif : $aktif"),
+                        child: Text("Aktif : $aktif",
+                          style: FontTheme.normal14Bold(color: Colors.black),),
                       ),
                     ),
                   ),

@@ -1,3 +1,4 @@
+import 'package:bel_sekolah/themes/fonts/Fonts.dart';
 import 'package:bel_sekolah/views/PutarManualPage.dart';
 import 'package:bel_sekolah/views/WebServerPage.dart';
 import 'package:flutter/material.dart';
@@ -119,10 +120,10 @@ class _MainPageState extends State<MainPage> {
                               ),
                             );
                           },
-                          child: const Text(
+                          child: Text(
                             "AP Mode", // "Menu Bluetooth",
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black87),
+                            style: FontTheme.normal14Bold(color: Colors.black87),
                           ),
                         ),
                       ),
@@ -184,10 +185,10 @@ class _MainPageState extends State<MainPage> {
                               ),
                             );
                           },
-                          child: const Text(
+                          child: Text(
                             "Edit Jadwal",
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black87),
+                            style: FontTheme.normal14Bold(color: Colors.black87),
                           ),
                         ),
                       ),
@@ -245,10 +246,10 @@ class _MainPageState extends State<MainPage> {
                           ),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         "Putar Manual",
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black87),
+                        style: FontTheme.normal14Bold(color: Colors.black87),
                       ),
                     ),
                   ),

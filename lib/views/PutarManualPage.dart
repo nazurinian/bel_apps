@@ -1,5 +1,6 @@
 import 'package:bel_sekolah/models/PutarManualModel.dart';
 import 'package:bel_sekolah/themes/colors/Colors.dart';
+import 'package:bel_sekolah/themes/fonts/Fonts.dart';
 import 'package:bel_sekolah/utils/Helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -120,7 +121,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
       setState(
         () {
           if (value) {
-            Text content = Text("Putar Bel/Audio sekarang?\n(${pilihan[_counter-1]})");
+            Text content = Text("Putar Bel/Audio sekarang?\n(${pilihan[_counter-1]})", style: FontTheme.normal14Bold(color: Colors.black),);
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
@@ -135,8 +136,8 @@ class _PutarManualPageState extends State<PutarManualPage> {
                   updateStatusPutarManual(manual);
                 });
           } else {
-            Text content = const Text(
-                "Bel/Audio sedang diputar saat ini.\nHentikan pemutaran?");
+            Text content = Text(
+                "Bel/Audio sedang diputar saat ini.\nHentikan pemutaran?", style: FontTheme.normal14Bold(color: Colors.black),);
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
@@ -173,7 +174,8 @@ class _PutarManualPageState extends State<PutarManualPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Putar Manual Bel/Audio"),
+        title: const Text("Putar Manual Bel/Audio",
+          style: TextStyle(fontWeight: FontWeight.bold),),
       ),
       body: ConnectionChecker(
         connectedWidget: Container(
@@ -229,6 +231,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                             ? Colors.white
                                             : Colors.black,
                                         fontSize: 14,
+                                        fontWeight: FontWeight.bold
                                       ),
                                     ),
                                     leading: Text(
@@ -238,6 +241,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                             ? Colors.white
                                             : Colors.black,
                                         fontSize: 14,
+                                        fontWeight: FontWeight.bold
                                       ),
                                     ),
                                     onTap: () => _onTitleTap(index + 1),
@@ -269,6 +273,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             fontSize: 18,
+                                            fontWeight: FontWeight.bold
                                           ),
                                         ),
                                       ),
@@ -311,6 +316,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                         setState(() {});
                                       },
                                       textAlign: TextAlign.center,
+                                      style: FontTheme.normal14Bold(color: Colors.black),
                                     ),
                                   ),
                                   const SizedBox(width: 16),
@@ -319,7 +325,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                         _switchValue ? null : _incrementCounter,
                                     child: const Text(
                                       '+',
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ],
