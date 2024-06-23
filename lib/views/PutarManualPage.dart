@@ -99,7 +99,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
         _counter++;
         _controller.text = _counter.toString();
       }
-      listTileTap = false;
+      listTileTap = true;
     });
   }
 
@@ -109,7 +109,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
         _counter--;
         _controller.text = _counter.toString();
       }
-      listTileTap = false;
+      listTileTap = true;
     });
   }
 
@@ -175,12 +175,6 @@ class _PutarManualPageState extends State<PutarManualPage> {
     });
   }
 
-  void _onButtonPress() {
-    setState(() {
-      _counter = 1; // Atur nilai ini sesuai kebutuhan
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -235,7 +229,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                             ? (_counter != index + 1
                                                 ? Colors.transparent
                                                 : Colors.green)
-                                            : Colors.green)
+                                            : Colors.transparent)
                                         : Colors.white24,
                                     child: InkWell(
                                       splashColor: ColorsTheme.red,
@@ -310,7 +304,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                                 ? (_counter != index
                                                     ? Colors.transparent
                                                     : Colors.green)
-                                                : Colors.green)
+                                                : Colors.transparent)
                                             : Colors.white24,
                                         child: InkWell(
                                           splashColor: ColorsTheme.red,
