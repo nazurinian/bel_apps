@@ -25,6 +25,8 @@ class _PutarManualPageState extends State<PutarManualPage> {
   final int _minValue = 0;
   final int _maxValue = 7;
 
+  bool listTileTap = true;
+
   final List<String> pilihan = [
     "Bel Literasi Pagi",
     "Bel Awal Masuk Jam Kelas",
@@ -98,6 +100,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
         _counter++;
         _controller.text = _counter.toString();
       }
+      listTileTap = true;
     });
   }
 
@@ -107,6 +110,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
         _counter--;
         _controller.text = _counter.toString();
       }
+      listTileTap = true;
     });
   }
 
@@ -226,35 +230,57 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                   color: _counter == index + 1
                                       ? Colors.green
                                       : Colors.white24,
-                                  child: ListTile(
-                                    dense: true,
-                                    splashColor: ColorsTheme.lightBackground2,
-                                    visualDensity:
-                                        const VisualDensity(vertical: -4),
-                                    // to compact
-                                    title: Text(
-                                      pilihan[index],
-                                      style: TextStyle(
-                                          color: _counter == (index + 1)
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 500),
+                                    color: _counter == index + 1
+                                        ? (listTileTap
+                                            ? (_counter != index + 1
+                                                ? Colors.transparent
+                                                : Colors.green)
+                                            : Colors.transparent)
+                                        : Colors.white24,
+                                    child: InkWell(
+                                      splashColor: ColorsTheme.red,
+                                      onTapDown: (_) {
+                                        _switchValue
+                                            ? null
+                                            : _onTitleTap(index + 1);
+                                        setState(() {
+                                          listTileTap = false;
+                                        });
+                                      },
+                                      onTapUp: (_) => setState(() {
+                                        listTileTap = true;
+                                      }),
+                                      onTapCancel: () => setState(() {
+                                        listTileTap = true;
+                                      }),
+                                      child: ListTile(
+                                        dense: true,
+                                        visualDensity:
+                                            const VisualDensity(vertical: -4),
+                                        title: Text(
+                                          pilihan[index],
+                                          style: TextStyle(
+                                              color: _counter == (index + 1)
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        leading: Text(
+                                          "${index + 1}",
+                                          style: TextStyle(
+                                              color: _counter == (index + 1)
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        // onTap: () => _onTitleTap(index + 1),
+                                        // onTap: () {},
+                                      ),
                                     ),
-                                    leading: Text(
-                                      "${index + 1}",
-                                      style: TextStyle(
-                                          color: _counter == (index + 1)
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    // onTap: () => _onTitleTap(index + 1),
-                                    // onTap: () {},
-                                    onTap: () => _switchValue
-                                        ? null
-                                        : _onTitleTap(index + 1),
                                   ),
                                 );
                               },
@@ -264,23 +290,48 @@ class _PutarManualPageState extends State<PutarManualPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children:
                                   List.generate((pilihan.length + 1), (index) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
+                                return Container(
+                                  margin: const EdgeInsets.symmetric(
                                       horizontal: 4.0),
-                                  child: GestureDetector(
-                                    onTap: () => _switchValue
-                                        ? null
-                                        : _onTitleTap(index),
-                                    child: SizedBox(
-                                      width: 30,
-                                      child: Card(
-                                        color: _counter == index
-                                            ? Colors.green
-                                            : Colors.white24,
+                                  width: 30,
+                                  child: Card(
+                                    clipBehavior: Clip.antiAlias,
+                                    color: _counter == index
+                                        ? Colors.green
+                                        : Colors.white24,
+                                    child: AnimatedContainer(
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      color: _counter == index
+                                          ? (listTileTap
+                                              ? (_counter != index
+                                                  ? Colors.transparent
+                                                  : Colors.green)
+                                              : Colors.green)
+                                          : Colors.white24,
+                                      child: InkWell(
+                                        splashColor: ColorsTheme.red,
+                                        onTapDown: (_) {
+                                          _switchValue
+                                              ? null
+                                              : _onTitleTap(index);
+                                          setState(() {
+                                            listTileTap = false;
+                                          });
+                                        },
+                                        onTapUp: (_) => setState(() {
+                                          listTileTap = true;
+                                        }),
+                                        onTapCancel: () => setState(() {
+                                          listTileTap = true;
+                                        }),
                                         child: Text(
                                           '$index',
                                           textAlign: TextAlign.center,
-                                          style: const TextStyle(
+                                          style: TextStyle(
+                                              color: _counter == (index)
+                                                  ? Colors.white
+                                                  : Colors.black,
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
