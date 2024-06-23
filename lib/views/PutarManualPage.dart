@@ -307,7 +307,7 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                               ? (_counter != index
                                                   ? Colors.transparent
                                                   : Colors.green)
-                                              : Colors.green)
+                                              : Colors.transparent)
                                           : Colors.white24,
                                       child: InkWell(
                                         splashColor: ColorsTheme.red,
