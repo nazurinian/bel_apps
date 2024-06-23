@@ -97,7 +97,8 @@ class _NextScheduleState extends State<NextSchedule> {
       for (int i = 0; i < schedule.length; i++) {
         int scheduleMinutes = (schedule[i].jam! * 60) + schedule[i].menit!;
         int firstScheduleMinutes = (schedule[0].jam! * 60) + schedule[0].menit!;
-        int lastScheduleMinutes = (schedule[15].jam! * 60) + schedule[15].menit!;
+        int lastScheduleMinutes =
+            (schedule[15].jam! * 60) + schedule[15].menit!;
 
         if (currentMinutes < firstScheduleMinutes) {
           belNow = "Belum masuk";
@@ -138,12 +139,12 @@ class _NextScheduleState extends State<NextSchedule> {
 
         int scheduleMinutes = jadwalJam * 60 + jadwalMenit;
         int firstScheduleMinutes = (schedule[0].jam! * 60) + schedule[0].menit!;
-        int lastScheduleMinutes = (schedule[15].jam! * 60) +
-            schedule[15].menit!;
+        int lastScheduleMinutes =
+            (schedule[15].jam! * 60) + schedule[15].menit!;
 
         if (currentMinutes < firstScheduleMinutes) {
           nextBel =
-          "${_formathm(schedule[0].jam!)}:${_formathm(schedule[0].menit!)}";
+              "${_formathm(schedule[0].jam!)}:${_formathm(schedule[0].menit!)}";
           break;
         } else {
           if (currentMinutes >= lastScheduleMinutes) {
@@ -151,8 +152,7 @@ class _NextScheduleState extends State<NextSchedule> {
           } else {
             if (currentMinutes >= scheduleMinutes) {
               nextBel =
-              "${_formathm(schedule[i + 1].jam!)}:${_formathm(
-                  schedule[i + 1].menit!)}";
+                  "${_formathm(schedule[i + 1].jam!)}:${_formathm(schedule[i + 1].menit!)}";
             }
           }
         }

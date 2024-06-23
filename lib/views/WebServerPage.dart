@@ -184,7 +184,8 @@ class _WebServerPageState extends State<WebServerPage> {
       PermissionStatus locationPermissionData =
           await Permission.location.status;
 
-      if (locationPermissionData.isDenied || locationPermissionData.isPermanentlyDenied) {
+      if (locationPermissionData.isDenied ||
+          locationPermissionData.isPermanentlyDenied) {
         icon = Icons.location_disabled;
         message = "Izin lokasi belum diberikan";
       }

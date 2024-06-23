@@ -313,8 +313,8 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                         int.parse(jam),
                         int.parse(menit),
                         (TimeOfDay selectedTime) {
-                          Text content =
-                              Text('Jam: ${_formathm(selectedTime.hour)}:${_formathm(selectedTime.minute)}');
+                          Text content = Text(
+                              'Jam: ${_formathm(selectedTime.hour)}:${_formathm(selectedTime.minute)}');
                           DialogUtil.showConfirmationDialog(
                             context: context,
                             title: 'Waktu yang Dipilih',

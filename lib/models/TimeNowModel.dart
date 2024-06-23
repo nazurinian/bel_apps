@@ -38,7 +38,8 @@ class CustomTime {
 
   String getAllTime() {
     DateTime now = DateTime.now();
-    String formattedDateTime = DateFormat('EEEE, MM-dd-yyyy \nHH:mm:ss', 'id_ID').format(now);
+    String formattedDateTime =
+        DateFormat('EEEE, MM-dd-yyyy \nHH:mm:ss', 'id_ID').format(now);
     return formattedDateTime;
   }
 }

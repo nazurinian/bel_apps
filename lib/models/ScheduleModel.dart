@@ -12,24 +12,25 @@ class Schedule {
     this.menit,
   });
 
-  Schedule.fromSnapshot(DataSnapshot snapshot) :
-        aktif = (snapshot.value as Map<String, dynamic>)["aktif"],
+  Schedule.fromSnapshot(DataSnapshot snapshot)
+      : aktif = (snapshot.value as Map<String, dynamic>)["aktif"],
         jam = (snapshot.value as Map<String, dynamic>)["jam"],
         menit = (snapshot.value as Map<String, dynamic>)["menit"];
 
-  factory Schedule.fromRawJson(String str) => Schedule.fromJson(json.decode(str));
+  factory Schedule.fromRawJson(String str) =>
+      Schedule.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory Schedule.fromJson(Map<dynamic, dynamic> json) => Schedule(
-    aktif: json["aktif"],
-    jam: json["jam"],
-    menit: json["menit"],
-  );
+        aktif: json["aktif"],
+        jam: json["jam"],
+        menit: json["menit"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "aktif": aktif,
-    "jam": jam,
-    "menit": menit,
-  };
+        "aktif": aktif,
+        "jam": jam,
+        "menit": menit,
+      };
 }
