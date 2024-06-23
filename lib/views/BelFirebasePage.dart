@@ -44,18 +44,26 @@ class _BelFirebasePageState extends State<BelFirebasePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Jadwal Bel",
-            style: TextStyle(fontWeight: FontWeight.bold),),
+        title: const Text(
+          "Edit Jadwal Bel",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         bottom: TabBar(
           controller: controller,
           tabs: const [
             Tab(
               icon: Icon(Icons.access_time_filled),
-              child: Text("Senin-Kamis", style: TextStyle(fontWeight: FontWeight.bold),),
+              child: Text(
+                "Senin-Kamis",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             Tab(
               icon: Icon(Icons.access_time),
-              child: Text("Jum'at", style: TextStyle(fontWeight: FontWeight.bold),),
+              child: Text(
+                "Jum'at",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
@@ -315,9 +323,10 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                         int.parse(jam),
                         int.parse(menit),
                         (TimeOfDay selectedTime) {
-                          Text content =
-                              Text('Jam: ${_formathm(selectedTime.hour)}:${_formathm(selectedTime.minute)}',
-                                style: FontTheme.normal14Bold(color: Colors.black),);
+                          Text content = Text(
+                            'Jam: ${_formathm(selectedTime.hour)}:${_formathm(selectedTime.minute)}',
+                            style: FontTheme.normal14Bold(color: Colors.black),
+                          );
                           DialogUtil.showConfirmationDialog(
                             context: context,
                             title: 'Waktu yang Dipilih',
@@ -339,10 +348,16 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text("Jam : $jam",
-                              style: FontTheme.normal14Bold(color: Colors.black),),
-                            Text("Menit : $menit",
-                              style: FontTheme.normal14Bold(color: Colors.black),),
+                            Text(
+                              "Jam : $jam",
+                              style:
+                                  FontTheme.normal14Bold(color: Colors.black),
+                            ),
+                            Text(
+                              "Menit : $menit",
+                              style:
+                                  FontTheme.normal14Bold(color: Colors.black),
+                            ),
                           ],
                         ),
                       ),
@@ -372,8 +387,11 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                       fontSize: 14),
                                 ),
                                 RadioListTile(
-                                    title: Text("True",
-                                      style: FontTheme.normal14Bold(color: Colors.black),),
+                                    title: Text(
+                                      "True",
+                                      style: FontTheme.normal14Bold(
+                                          color: Colors.black),
+                                    ),
                                     value: 1,
                                     groupValue: selectedRadioTile,
                                     onChanged: (val) {
@@ -382,8 +400,11 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                                       });
                                     }),
                                 RadioListTile(
-                                  title: Text("False",
-                                    style: FontTheme.normal14Bold(color: Colors.black),),
+                                  title: Text(
+                                    "False",
+                                    style: FontTheme.normal14Bold(
+                                        color: Colors.black),
+                                  ),
                                   value: 2,
                                   groupValue: selectedRadioTile,
                                   onChanged: (val) {
@@ -416,8 +437,10 @@ class _GetScheduleDatabaseState extends State<GetScheduleDatabase> {
                         width: 100,
                         height: 50,
                         alignment: Alignment.center,
-                        child: Text("Aktif : $aktif",
-                          style: FontTheme.normal14Bold(color: Colors.black),),
+                        child: Text(
+                          "Aktif : $aktif",
+                          style: FontTheme.normal14Bold(color: Colors.black),
+                        ),
                       ),
                     ),
                   ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TimePicker {
-  static Future<TimeOfDay?> customTime(BuildContext context, String schedule, int initHour,
-      int initMinute, Function(TimeOfDay) onSelectTime) {
+  static Future<TimeOfDay?> customTime(BuildContext context, String schedule,
+      int initHour, int initMinute, Function(TimeOfDay) onSelectTime) {
     return showTimePicker(
       helpText: schedule,
       initialTime: TimeOfDay(hour: initHour, minute: initMinute),
@@ -18,12 +18,15 @@ class TimePicker {
                 dialTextStyle: const TextStyle(fontWeight: FontWeight.bold),
                 helpTextStyle: const TextStyle(fontWeight: FontWeight.bold),
                 cancelButtonStyle: ButtonStyle(
-                  textStyle: WidgetStateProperty.all<TextStyle>(const TextStyle(fontWeight: FontWeight.bold)), // Bold text style
+                  textStyle: WidgetStateProperty.all<TextStyle>(const TextStyle(
+                      fontWeight: FontWeight.bold)), // Bold text style
                 ),
                 confirmButtonStyle: ButtonStyle(
-                  textStyle: WidgetStateProperty.all<TextStyle>(const TextStyle(fontWeight: FontWeight.bold)), // Bold text style
+                  textStyle: WidgetStateProperty.all<TextStyle>(const TextStyle(
+                      fontWeight: FontWeight.bold)), // Bold text style
                 ),
-                dayPeriodTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+                dayPeriodTextStyle:
+                    const TextStyle(fontWeight: FontWeight.bold),
               ),
               child: child!,
             ),
@@ -31,7 +34,7 @@ class TimePicker {
         );
       },
     ).then(
-          (TimeOfDay? time) {
+      (TimeOfDay? time) {
         if (time != null) {
           onSelectTime(time);
         }

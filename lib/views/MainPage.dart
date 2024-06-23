@@ -123,7 +123,8 @@ class _MainPageState extends State<MainPage> {
                           child: Text(
                             "AP Mode", // "Menu Bluetooth",
                             textAlign: TextAlign.center,
-                            style: FontTheme.normal14Bold(color: Colors.black87),
+                            style:
+                                FontTheme.normal14Bold(color: Colors.black87),
                           ),
                         ),
                       ),
@@ -188,7 +189,8 @@ class _MainPageState extends State<MainPage> {
                           child: Text(
                             "Edit Jadwal",
                             textAlign: TextAlign.center,
-                            style: FontTheme.normal14Bold(color: Colors.black87),
+                            style:
+                                FontTheme.normal14Bold(color: Colors.black87),
                           ),
                         ),
                       ),

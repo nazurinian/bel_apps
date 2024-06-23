@@ -18,6 +18,7 @@ class PermissionHandlerWidget extends StatefulWidget {
 
 class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
   bool locationGranted = false;
+
   // bool bluetoothGranted = false;
   bool permissionsRequested = false;
 
@@ -65,9 +66,7 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
   @override
   Widget build(BuildContext context) {
     if (!permissionsRequested) {
-      return const Center(
-          child:
-              CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
 
     // return (locationGranted && bluetoothGranted)
@@ -77,12 +76,9 @@ class _PermissionHandlerWidgetState extends State<PermissionHandlerWidget> {
             future: widget.notPermittedBuilder(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                    child:
-                        CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
-              return snapshot.data ??
-                  Container();
+              return snapshot.data ?? Container();
             },
           );
   }

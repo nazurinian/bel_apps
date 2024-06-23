@@ -88,7 +88,8 @@ class _PutarManualPageState extends State<PutarManualPage> {
         .then((value) => ToastUtil.showToast(
             "Berhasil $update Pemutaran Bel/Audio", ToastStatus.success))
         .catchError((error) => ToastUtil.showToast(
-            "Gagal $errorUpdate Pemutaran Bel/Audio\ndata: $error", ToastStatus.error));
+            "Gagal $errorUpdate Pemutaran Bel/Audio\ndata: $error",
+            ToastStatus.error));
   }
 
   void _incrementCounter() {
@@ -121,7 +122,10 @@ class _PutarManualPageState extends State<PutarManualPage> {
       setState(
         () {
           if (value) {
-            Text content = Text("Putar Bel/Audio sekarang?\n(${pilihan[_counter-1]})", style: FontTheme.normal14Bold(color: Colors.black),);
+            Text content = Text(
+              "Putar Bel/Audio sekarang?\n(${pilihan[_counter - 1]})",
+              style: FontTheme.normal14Bold(color: Colors.black),
+            );
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
@@ -137,7 +141,9 @@ class _PutarManualPageState extends State<PutarManualPage> {
                 });
           } else {
             Text content = Text(
-                "Bel/Audio sedang diputar saat ini.\nHentikan pemutaran?", style: FontTheme.normal14Bold(color: Colors.black),);
+              "Bel/Audio sedang diputar saat ini.\nHentikan pemutaran?",
+              style: FontTheme.normal14Bold(color: Colors.black),
+            );
             DialogUtil.showConfirmationDialog(
                 context: context,
                 title: "Konfirmasi",
@@ -174,8 +180,10 @@ class _PutarManualPageState extends State<PutarManualPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Putar Manual Bel/Audio",
-          style: TextStyle(fontWeight: FontWeight.bold),),
+        title: const Text(
+          "Putar Manual Bel/Audio",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: ConnectionChecker(
         connectedWidget: Container(
@@ -227,22 +235,20 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                     title: Text(
                                       pilihan[index],
                                       style: TextStyle(
-                                        color: _counter == (index + 1)
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold
-                                      ),
+                                          color: _counter == (index + 1)
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     leading: Text(
                                       "${index + 1}",
                                       style: TextStyle(
-                                        color: _counter == (index + 1)
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold
-                                      ),
+                                          color: _counter == (index + 1)
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     // onTap: () => _onTitleTap(index + 1),
                                     // onTap: () {},
@@ -275,9 +281,8 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                           '$index',
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold
-                                          ),
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -319,7 +324,8 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                         setState(() {});
                                       },
                                       textAlign: TextAlign.center,
-                                      style: FontTheme.normal14Bold(color: Colors.black),
+                                      style: FontTheme.normal14Bold(
+                                          color: Colors.black),
                                     ),
                                   ),
                                   const SizedBox(width: 16),
@@ -328,7 +334,9 @@ class _PutarManualPageState extends State<PutarManualPage> {
                                         _switchValue ? null : _incrementCounter,
                                     child: const Text(
                                       '+',
-                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ],

@@ -10,22 +10,22 @@ class PutarManual {
     required this.choice,
   });
 
-  PutarManual.fromSnapshot(DataSnapshot snapshot) :
-        putar = (snapshot.value as Map<String, dynamic>)["putar"],
+  PutarManual.fromSnapshot(DataSnapshot snapshot)
+      : putar = (snapshot.value as Map<String, dynamic>)["putar"],
         choice = (snapshot.value as Map<String, dynamic>)["choice"];
 
-
-  factory PutarManual.fromRawJson(String str) => PutarManual.fromJson(json.decode(str));
+  factory PutarManual.fromRawJson(String str) =>
+      PutarManual.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory PutarManual.fromJson(Map<dynamic, dynamic> json) => PutarManual(
-    putar: json["putar"],
-    choice: json["choice"],
-  );
+        putar: json["putar"],
+        choice: json["choice"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "putar": putar,
-    "choice": choice,
-  };
+        "putar": putar,
+        "choice": choice,
+      };
 }
